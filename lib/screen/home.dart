@@ -94,6 +94,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           )
                         ],
                         bottom: TabBar(
+                          isScrollable: true,
                           tabs: todoLists.map((todoList) {
                             return Tab(
                               text: todoList.title,
