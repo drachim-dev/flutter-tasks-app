@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasks_flutter_v2/common/helper.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
@@ -16,6 +17,9 @@ class Add extends StatefulWidget {
 class _AddState extends State<Add> {
   final TodoList todoList;
   final Todo todo;
+
+  static const String _deleteTodo = 'Delete';
+
   TextEditingController _titleController;
   TextEditingController _descController;
 
@@ -77,6 +81,16 @@ class _AddState extends State<Add> {
 
   AppBar _buildAppBar(ThemeData theme, Color titleHintColor) {
     return AppBar(
+      actions: <Widget>[
+        PopupMenuButton<String>(
+          onSelected: _onSelectMenuItem,
+          itemBuilder: (BuildContext context) =>
+          <PopupMenuEntry<String>>[
+            Helper.buildMenuItem(
+                Icons.delete, _deleteTodo),
+          ],
+        )
+      ],
       bottom: PreferredSize(
         preferredSize: Size(0.0, 80.0),
         child: Padding(
@@ -84,6 +98,16 @@ class _AddState extends State<Add> {
             child: _buildTitle(theme, titleHintColor)),
       ),
     );
+  }
+
+  void _onSelectMenuItem(String value) {
+    switch (value) {
+      case _deleteTodo:
+        TodoListProvider.of(context).deleteTodos(todoList, [todo]);
+        Navigator.pop(context);
+        break;
+      default:
+    }
   }
 
   TextField _buildTitle(ThemeData theme, Color titleHintColor) {
