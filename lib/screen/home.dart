@@ -67,55 +67,59 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             List<TodoList> todoLists = snapshot.data;
 
             if (todoLists.isNotEmpty) {
-              TabController tabController =
-                  TabController(length: todoLists.length, vsync: this);
-
-              FloatingActionButton fab = FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(context, Routes.addTask,
-                    arguments: {'todoList': todoLists[tabController.index]}),
-                child: Icon(Icons.add),
-              );
-
-              return Scaffold(
-                appBar: AppBar(
-                    title: title,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.sort),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.filter_list),
-                        onPressed: () {},
-                      ),
-                      PopupMenuButton<String>(
-                        onSelected: _onSelectMenuItem,
-                        itemBuilder: (BuildContext context) =>
+              return DefaultTabController(
+                length: todoLists.length,
+                child: Builder(builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: AppBar(
+                        title: title,
+                        actions: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.sort),
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.filter_list),
+                            onPressed: () {},
+                          ),
+                          PopupMenuButton<String>(
+                            onSelected: _onSelectMenuItem,
+                            itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
                               Helper.buildMenuItem(
                                   Icons.playlist_add, _addList),
                               Helper.buildMenuItem(
                                   Icons.settings, _openSettings),
                             ],
-                      )
-                    ],
-                    bottom: TabBar(
-                      controller: tabController,
-                      tabs: todoLists.map((todoList) {
-                        return Tab(
-                          text: todoList.title,
-                        );
+                          )
+                        ],
+                        bottom: TabBar(
+                          tabs: todoLists.map((todoList) {
+                            return Tab(
+                              text: todoList.title,
+                            );
+                          }).toList(),
+                        )),
+                    body: TabBarView(
+                      children: todoLists.map((todoList) {
+                        return todoList.todos.isNotEmpty
+                            ? _buildListView(todoList)
+                            : _buildEmptyContainer();
                       }).toList(),
-                    )),
-                body: TabBarView(
-                  controller: tabController,
-                  children: todoLists.map((todoList) {
-                    return todoList.todos.isNotEmpty
-                        ? _buildListView(todoList)
-                        : _buildEmptyContainer();
-                  }).toList(),
-                ),
-                floatingActionButton: fab,
+                    ),
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(
+                              context, Routes.addTask, arguments: {
+                            'todoList': todoLists[
+                            DefaultTabController
+                                .of(context)
+                                .index]
+                          }),
+                      child: Icon(Icons.add),
+                    ),
+                  );
+                }),
               );
             }
           }
