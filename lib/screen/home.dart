@@ -161,17 +161,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   ListView _buildListView(TodoList todoList) {
     return ListView.separated(
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(todoList.todos[index].title),
-            onTap: () => Navigator.pushNamed(context, Routes.editTask,
-                    arguments: {
-                      'todoList': todoList,
-                      'todo': todoList.todos[index]
-                    }),
-          );
+          final Todo todo = todoList.todos[index];
+          return _buildListItem(todo, todoList);
         },
         separatorBuilder: (BuildContext context, int index) => Divider(),
         itemCount: todoList.todos.length);
+  }
+
+  ListTile _buildListItem(Todo todo, TodoList todoList) {
+    final TextStyle textStyle = TextStyle(
+        decoration: todo.complete ? TextDecoration.lineThrough : null);
+
+    return ListTile(
+        leading: Checkbox(
+            value: todo.complete,
+            onChanged: (bool isChecked) =>
+                _toggleTodo(todoList, todo, isChecked)),
+        title: Text(
+          todo.title,
+          style: textStyle,
+          overflow: TextOverflow.ellipsis,
+        ),
+        onTap: () => _tapTodo(todoList, todo));
   }
 
   void _onSelectMenuItem(String value) {
@@ -194,5 +205,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         TodoListProvider.of(context).addTodoList(todoList);
       }
     });
+  }
+
+  void _toggleTodo(TodoList todoList, Todo todo, bool isChecked) {
+    todo.complete = isChecked;
+    TodoListProvider.of(context).updateTodo(todoList, todo);
+  }
+
+  void _tapTodo(final TodoList todoList, final Todo todo) {
+    Navigator.pushNamed(context, Routes.editTask,
+        arguments: {'todoList': todoList, 'todo': todo});
   }
 }
