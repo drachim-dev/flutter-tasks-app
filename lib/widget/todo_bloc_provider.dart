@@ -18,7 +18,5 @@ class TodoListProvider extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
   static TodoListBloc of(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(TodoListProvider)
-              as TodoListProvider)
-          .todoListBloc;
+      (context.inheritFromWidgetOfExactType(TodoListProvider) as TodoListProvider).todoListBloc;
 }

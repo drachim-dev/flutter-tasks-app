@@ -11,8 +11,7 @@ import 'package:tasks_flutter_v2/repository/user_repository.dart';
 class Repository {
   final UserRepository _userRepository =
       FirebaseUserRepository(FirebaseAuth.instance, GoogleSignIn());
-  final TodoRepository _todoRepository =
-      FirestoreTodoRepository(Firestore.instance);
+  final TodoRepository _todoRepository = FirestoreTodoRepository(Firestore.instance);
 
   Future<UserEntity> loginAnonymously() => _userRepository.loginAnonymously();
 
@@ -20,15 +19,13 @@ class Repository {
 
   Future<void> logout() => _userRepository.logout();
 
-  Future<void> addTodoList(TodoList todoList) =>
-      _todoRepository.addTodoList(todoList.toEntity());
+  Future<void> addTodoList(TodoList todoList) => _todoRepository.addTodoList(todoList.toEntity());
 
   Future<void> updateTodoList(TodoList todoList) =>
       _todoRepository.updateTodoList(todoList.toEntity());
 
   Future<void> deleteTodoLists(List<TodoList> todoLists) =>
-      _todoRepository.deleteTodoLists(
-          todoLists.map((todoList) => todoList.toEntity()).toList());
+      _todoRepository.deleteTodoLists(todoLists.map((todoList) => todoList.toEntity()).toList());
 
   Future<void> addTodo(TodoList todoList, Todo todo) =>
       _todoRepository.addTodo(todoList.toEntity(), todo.toEntity());

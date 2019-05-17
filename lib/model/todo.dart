@@ -8,15 +8,9 @@ class Todo {
   int position;
   bool complete;
 
-  Todo(
-      {this.id,
-      this.title = '',
-      this.note = '',
-      @required this.position,
-      this.complete = false});
+  Todo({this.id, this.title = '', this.note = '', @required this.position, this.complete = false});
 
-  Todo copyWith(
-      {String id, String title, String note, int position, bool complete}) {
+  Todo copyWith({String id, String title, String note, int position, bool complete}) {
     return Todo(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -28,11 +22,7 @@ class Todo {
 
   @override
   int get hashCode =>
-      id.hashCode ^
-      title.hashCode ^
-      note.hashCode ^
-      position.hashCode ^
-      complete.hashCode;
+      id.hashCode ^ title.hashCode ^ note.hashCode ^ position.hashCode ^ complete.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -51,8 +41,7 @@ class Todo {
   }
 
   TodoEntity toEntity() {
-    return TodoEntity(
-        id: id,
+    return TodoEntity(id: id,
         title: title,
         note: note,
         position: position,

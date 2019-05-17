@@ -19,11 +19,7 @@ class AuthService {
 
     profile = user.switchMap((FirebaseUser u) {
       if (u != null) {
-        return _db
-            .collection('users')
-            .document(u.uid)
-            .snapshots()
-            .map((snap) => snap.data);
+        return _db.collection('users').document(u.uid).snapshots().map((snap) => snap.data);
       } else {
         return Observable.just({});
       }
@@ -35,8 +31,7 @@ class AuthService {
     loading.add(true);
 
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,

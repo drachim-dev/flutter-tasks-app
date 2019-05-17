@@ -86,10 +86,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             onSelected: _onSelectMenuItem,
                             itemBuilder: (BuildContext context) =>
                             <PopupMenuEntry<String>>[
-                              Helper.buildMenuItem(
-                                  Icons.playlist_add, _addList),
-                              Helper.buildMenuItem(
-                                  Icons.settings, _openSettings),
+                              Helper.buildMenuItem(Icons.playlist_add, _addList),
+                              Helper.buildMenuItem(Icons.settings, _openSettings),
                             ],
                           )
                         ],
@@ -110,10 +108,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                     floatingActionButton: FloatingActionButton(
                       onPressed: () =>
-                          Navigator.pushNamed(
-                              context, Routes.addTask, arguments: {
-                            'todoList': todoLists[
-                            DefaultTabController
+                          Navigator.pushNamed(context, Routes.addTask, arguments: {
+                            'todoList': todoLists[DefaultTabController
                                 .of(context)
                                 .index]
                           }),
@@ -135,19 +131,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   children: <Widget>[
                     RaisedButton(
                       child: Text('Add a list'),
-                      onPressed: () => TodoListProvider.of(context).addTodoList(
-                              TodoList(title: 'Homework', todos: [
-                            Todo(title: 'Titel', note: 'Note', position: 0)
-                          ])),
+                      onPressed: () =>
+                          TodoListProvider.of(context).addTodoList(TodoList(
+                              title: 'Homework',
+                              todos: [Todo(title: 'Titel', note: 'Note', position: 0)])),
                     ),
                     RaisedButton(
                       child: Text('Firestore'),
                       onPressed: () {
-                        Stream<List<TodoList>> stream =
-                            TodoListProvider.of(context).todoLists;
+                        Stream<List<TodoList>> stream = TodoListProvider
+                            .of(context)
+                            .todoLists;
                         print(stream.first);
-                        stream.first
-                            .then((todoList) => print(todoList.toString()));
+                        stream.first.then((todoList) => print(todoList.toString()));
                       },
                     )
                   ],
@@ -169,14 +165,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   ListTile _buildListItem(Todo todo, TodoList todoList) {
-    final TextStyle textStyle = TextStyle(
-        decoration: todo.complete ? TextDecoration.lineThrough : null);
+    final TextStyle textStyle =
+    TextStyle(decoration: todo.complete ? TextDecoration.lineThrough : null);
 
     return ListTile(
         leading: Checkbox(
             value: todo.complete,
-            onChanged: (bool isChecked) =>
-                _toggleTodo(todoList, todo, isChecked)),
+            onChanged: (bool isChecked) => _toggleTodo(todoList, todo, isChecked)),
         title: Text(
           todo.title,
           style: textStyle,
@@ -197,8 +192,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   void _addTodoList() {
-    Helper.showInputDialog(context, title: 'New list', hint: 'Name')
-        .then((input) {
+    Helper.showInputDialog(context, title: 'New list', hint: 'Name').then((input) {
       if (input == null || input.isEmpty) {
       } else {
         final TodoList todoList = TodoList(title: input);
@@ -213,7 +207,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   void _tapTodo(final TodoList todoList, final Todo todo) {
-    Navigator.pushNamed(context, Routes.editTask,
-        arguments: {'todoList': todoList, 'todo': todo});
+    Navigator.pushNamed(context, Routes.editTask, arguments: {'todoList': todoList, 'todo': todo});
   }
 }

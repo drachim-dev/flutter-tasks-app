@@ -6,8 +6,7 @@ class TodoListEntity {
   final String title;
   final List<TodoEntity> todos;
 
-  TodoListEntity({String id, this.title, this.todos})
-      : this.id = id ?? Uuid().generateV4();
+  TodoListEntity({String id, this.title, this.todos}) : this.id = id ?? Uuid().generateV4();
 
   @override
   int get hashCode => id.hashCode ^ title.hashCode ^ todos.hashCode;

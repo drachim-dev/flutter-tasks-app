@@ -23,8 +23,7 @@ class _AddState extends State<Add> {
   TextEditingController _titleController;
   TextEditingController _descController;
 
-  _AddState({@required this.todoList, Todo todo})
-      : todo = todo ?? Todo(position: 0);
+  _AddState({@required this.todoList, Todo todo}) : todo = todo ?? Todo(position: 0);
 
   @override
   void initState() {
@@ -86,8 +85,7 @@ class _AddState extends State<Add> {
           onSelected: _onSelectMenuItem,
           itemBuilder: (BuildContext context) =>
           <PopupMenuEntry<String>>[
-            Helper.buildMenuItem(
-                Icons.delete, _deleteTodo),
+            Helper.buildMenuItem(Icons.delete, _deleteTodo),
           ],
         )
       ],

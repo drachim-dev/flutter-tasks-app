@@ -6,8 +6,7 @@ class TodoList {
   String title;
   List<Todo> todos;
 
-  TodoList({this.id, this.title = '', List<Todo> todos})
-      : this.todos = todos ?? [];
+  TodoList({this.id, this.title = '', List<Todo> todos}) : this.todos = todos ?? [];
 
   TodoList copyWith({String id, String title, List<Todo> todos}) {
     return TodoList(
@@ -36,9 +35,7 @@ class TodoList {
 
   TodoListEntity toEntity() {
     return TodoListEntity(
-        id: id,
-        title: title,
-        todos: todos.map((todo) => todo.toEntity()).toList());
+        id: id, title: title, todos: todos.map((todo) => todo.toEntity()).toList());
   }
 
   static TodoList fromEntity(TodoListEntity entity) {

@@ -18,25 +18,18 @@ class TodoListBloc {
   Future<void> logout() => repository.logout();
 
   Stream<List<TodoList>> get todoLists {
-    return repository
-        .todoLists()
-        .map((entities) => entities.map(TodoList.fromEntity).toList());
+    return repository.todoLists().map((entities) => entities.map(TodoList.fromEntity).toList());
   }
 
-  Future<void> addTodoList(TodoList todoList) =>
-      repository.addTodoList(todoList);
+  Future<void> addTodoList(TodoList todoList) => repository.addTodoList(todoList);
 
-  Future<void> updateTodoList(TodoList todoList) =>
-      repository.updateTodoList(todoList);
+  Future<void> updateTodoList(TodoList todoList) => repository.updateTodoList(todoList);
 
-  Future<void> deleteTodoLists(List<TodoList> todoLists) =>
-      repository.deleteTodoLists(todoLists);
+  Future<void> deleteTodoLists(List<TodoList> todoLists) => repository.deleteTodoLists(todoLists);
 
-  Future<void> updateTodo(TodoList todoList, Todo todo) =>
-      repository.updateTodo(todoList, todo);
+  Future<void> updateTodo(TodoList todoList, Todo todo) => repository.updateTodo(todoList, todo);
 
-  Future<void> addTodo(TodoList todoList, Todo todo) =>
-      repository.addTodo(todoList, todo);
+  Future<void> addTodo(TodoList todoList, Todo todo) => repository.addTodo(todoList, todo);
 
   Future<void> deleteTodos(TodoList todoList, List<Todo> todos) =>
       repository.deleteTodos(todoList, todos);

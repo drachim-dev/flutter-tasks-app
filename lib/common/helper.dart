@@ -6,8 +6,7 @@ class Helper {
       value: label,
       child: Row(
         children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 24.0), child: Icon(icon)),
+          Padding(padding: const EdgeInsets.only(right: 24.0), child: Icon(icon)),
           Text(label),
         ],
       ),
@@ -18,8 +17,7 @@ class Helper {
       {@required String title, @required String hint, String input}) {
     const String _cancel = 'Cancel';
     const String _confirm = 'Ok';
-    final TextEditingController _textEditingController =
-        TextEditingController(text: input);
+    final TextEditingController _textEditingController = TextEditingController(text: input);
 
     AlertDialog dialog = AlertDialog(
       title: Text(title),

@@ -27,18 +27,12 @@ class FirestoreTodoRepository implements TodoRepository {
 
   @override
   Future<void> addTodoList(TodoListEntity todoList) {
-    return firestore
-        .collection(tasklistsPath)
-        .document(todoList.id)
-        .setData(todoList.toJson());
+    return firestore.collection(tasklistsPath).document(todoList.id).setData(todoList.toJson());
   }
 
   @override
   Future<void> updateTodoList(TodoListEntity todoList) {
-    return firestore
-        .collection(tasklistsPath)
-        .document(todoList.id)
-        .updateData(todoList.toJson());
+    return firestore.collection(tasklistsPath).document(todoList.id).updateData(todoList.toJson());
   }
 
   @override
@@ -58,8 +52,7 @@ class FirestoreTodoRepository implements TodoRepository {
   }
 
   @override
-  Future<void> deleteTodos(
-      TodoListEntity todoList, final List<TodoEntity> todos) {
+  Future<void> deleteTodos(TodoListEntity todoList, final List<TodoEntity> todos) {
     todos.forEach((todo) => todoList.todos.remove(todo));
     return updateTodoList(todoList);
   }

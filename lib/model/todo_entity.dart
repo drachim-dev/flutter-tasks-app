@@ -8,21 +8,12 @@ class TodoEntity {
   final int position;
   final bool complete;
 
-  TodoEntity(
-      {String id,
-      this.title,
-      this.note,
-      @required this.position,
-      this.complete = false})
+  TodoEntity({String id, this.title, this.note, @required this.position, this.complete = false})
       : this.id = id ?? Uuid().generateV4();
 
   @override
   int get hashCode =>
-      id.hashCode ^
-      title.hashCode ^
-      note.hashCode ^
-      position.hashCode ^
-      complete.hashCode;
+      id.hashCode ^ title.hashCode ^ note.hashCode ^ position.hashCode ^ complete.hashCode;
 
   @override
   bool operator ==(Object other) =>
