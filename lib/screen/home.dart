@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
+import 'package:tasks_flutter_v2/model/user_entity.dart';
 import 'package:tasks_flutter_v2/routes.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
 
@@ -16,6 +17,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _addList = 'Add list';
   static const String _openSettings = 'Settings';
 
+  UserEntity _user;
+  bool _progress = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,36 +32,92 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: TodoListProvider.of(context).loginViaGoogle(),
-        builder: (context, snapshot) {
-          return snapshot.hasData
-              ? // Logged in
-              showApp(context)
-/*                  MaterialButton(
-                      onPressed: () => TodoListProvider.of(context).logout(),
-                      color: Colors.red,
-                      textColor: Colors.white,
-                      child: Text('Signout'),
-                    )*/
-              // Need to login
-              : Scaffold(
-                  appBar: AppBar(
-                    title: Text('Test'),
-                  ),
-                  body: Center(
-                    child: MaterialButton(
-                      onPressed: () => null,
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      child: Text('Login with Google'),
-                    ),
-                  ),
-                );
-        });
+    final ThemeData theme = Theme.of(context);
+
+    if (_user == null) {
+      return _buildLoginScreen(context, theme);
+    } else {
+      return _buildApp(context);
+    }
   }
 
-  StreamBuilder showApp(BuildContext context) {
+  Scaffold _buildLoginScreen(BuildContext context, ThemeData theme) {
+    final double titleIconSize = 128.0;
+    final Color titleColor = Colors.white;
+    final TextStyle titleTextStyle = theme.textTheme.headline.copyWith(color: titleColor);
+
+    final double msgIconSize = 96.0;
+    final Color msgColor = Colors.grey;
+    final TextStyle msgTextStyle = theme.textTheme.subhead.copyWith(color: msgColor);
+
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            color: theme.accentColor,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height / 2.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.check,
+                  size: titleIconSize,
+                  color: titleColor,
+                ),
+                Text('Tasks', style: titleTextStyle)
+              ],
+            ),
+          ),
+          _progress == true ? LinearProgressIndicator() : SizedBox(height: 6),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'To get startet, press the button below',
+                  style: msgTextStyle,
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+                IconButton(
+                  iconSize: msgIconSize,
+                  splashColor: theme.accentColor.withOpacity(0.5),
+                  highlightColor: Colors.transparent,
+                  color: msgColor,
+                  icon: Icon(
+                    Icons.backup,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _progress = true;
+                    });
+
+                    TodoListProvider.of(context).loginViaGoogle().then((user) {
+                      setState(() {
+                        _user = user;
+                        _progress = false;
+                      });
+                    });
+                  },
+                ),
+                Text(
+                  'Turn on backup & sync',
+                  style: msgTextStyle,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  StreamBuilder _buildApp(BuildContext context) {
     return StreamBuilder(
         stream: TodoListProvider.of(context).todoLists,
         builder: (context, snapshot) {
