@@ -10,8 +10,10 @@ main() {
 }
 
 class MyApp extends StatelessWidget {
+  static const String _title = 'Tasks';
+
   final Map _routes = <String, WidgetBuilder>{
-    Routes.home: (BuildContext context) => Home(),
+    Routes.home: (BuildContext context) => Home(title: _title),
   };
 
   Route _getRoute(RouteSettings settings) {
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
             return Add(todoList: map['todoList'], todo: map['todo']);
             break;
           default:
-            // The other paths we support are in the routes table.
+          // The other paths we support are in the routes table.
             return null;
         }
       },
@@ -40,8 +42,9 @@ class MyApp extends StatelessWidget {
     return TodoListProvider(
       repository: Repository(),
       child: MaterialApp(
+        title: _title,
         theme: _theme(),
-        home: Home(),
+        home: Home(title: _title),
         routes: _routes,
         onGenerateRoute: _getRoute,
       ),

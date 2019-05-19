@@ -7,18 +7,23 @@ import 'package:tasks_flutter_v2/routes.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
 
 class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
+  Home({Key key, @required this.title}) : super(key: key);
+
+  final String title;
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(title: title);
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _addList = 'Add list';
   static const String _openSettings = 'Settings';
+  final String title;
 
   UserEntity _user;
   bool _progress = false;
+
+  _HomeState({@required this.title});
 
   @override
   void initState() {
@@ -34,11 +39,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    if (_user == null) {
-      return _buildLoginScreen(context, theme);
-    } else {
-      return _buildApp(context);
-    }
+    if (_user == null) return _buildLoginScreen(context, theme);
+
+    return StreamBuilder(
+        stream: TodoListProvider
+            .of(context)
+            .todoLists,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<TodoList> todoLists = snapshot.data;
+            return todoLists.isEmpty ? _buildEmptyApp(theme) : _buildApp(context, theme, todoLists);
+          }
+        });
   }
 
   Scaffold _buildLoginScreen(BuildContext context, ThemeData theme) {
@@ -77,21 +89,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'To get startet, press the button below',
-                  style: msgTextStyle,
-                ),
-                SizedBox(
-                  height: 32,
-                ),
+                Text('To get startet, press the button below', style: msgTextStyle),
+                SizedBox(height: 32),
                 IconButton(
                   iconSize: msgIconSize,
                   splashColor: theme.accentColor.withOpacity(0.5),
                   highlightColor: Colors.transparent,
                   color: msgColor,
-                  icon: Icon(
-                    Icons.backup,
-                  ),
+                  icon: Icon(Icons.backup),
                   onPressed: () {
                     setState(() {
                       _progress = true;
@@ -117,102 +122,101 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  StreamBuilder _buildApp(BuildContext context) {
-    return StreamBuilder(
-        stream: TodoListProvider.of(context).todoLists,
-        builder: (context, snapshot) {
-          Text title = Text('Tasks');
-
-          if (snapshot.hasData) {
-            List<TodoList> todoLists = snapshot.data;
-
-            if (todoLists.isNotEmpty) {
-              return DefaultTabController(
-                length: todoLists.length,
-                child: Builder(builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                        title: title,
-                        actions: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.sort),
-                            onPressed: () {},
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.filter_list),
-                            onPressed: () {},
-                          ),
-                          PopupMenuButton<String>(
-                            onSelected: _onSelectMenuItem,
-                            itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<String>>[
-                              Helper.buildMenuItem(Icons.playlist_add, _addList),
-                              Helper.buildMenuItem(Icons.settings, _openSettings),
-                            ],
-                          )
-                        ],
-                        bottom: TabBar(
-                          isScrollable: true,
-                          tabs: todoLists.map((todoList) {
-                            return Tab(
-                              text: todoList.title,
-                            );
-                          }).toList(),
-                        )),
-                    body: TabBarView(
-                      children: todoLists.map((todoList) {
-                        return todoList.todos.isNotEmpty
-                            ? _buildListView(todoList)
-                            : _buildEmptyContainer();
-                      }).toList(),
-                    ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, Routes.addTask, arguments: {
-                            'todoList': todoLists[DefaultTabController
-                                .of(context)
-                                .index]
-                          }),
-                      child: Icon(Icons.add),
-                    ),
-                  );
-                }),
-              );
-            }
-          }
-
-          // no todoLists
-          return Scaffold(
-              appBar: AppBar(
-                title: title,
-              ),
-              body: Center(
-                child: Column(
-                  children: <Widget>[
-                    RaisedButton(
-                      child: Text('Add a list'),
-                      onPressed: () =>
-                          TodoListProvider.of(context).addTodoList(TodoList(
-                              title: 'Homework',
-                              todos: [Todo(title: 'Titel', note: 'Note', position: 0)])),
-                    ),
-                    RaisedButton(
-                      child: Text('Firestore'),
-                      onPressed: () {
-                        Stream<List<TodoList>> stream = TodoListProvider
-                            .of(context)
-                            .todoLists;
-                        print(stream.first);
-                        stream.first.then((todoList) => print(todoList.toString()));
-                      },
-                    )
-                  ],
-                ),
-              ));
-        });
+  DefaultTabController _buildApp(BuildContext context, ThemeData theme, List<TodoList> todoLists) {
+    return DefaultTabController(
+      length: todoLists.length,
+      child: Builder(builder: (BuildContext context) {
+        return Scaffold(
+          appBar: _buildAppBar(todoLists: todoLists),
+          body: TabBarView(
+            children: todoLists.map((todoList) {
+              return todoList.todos.isNotEmpty
+                  ? _buildListView(todoList)
+                  : _buildEmptyItems(theme, todoList: todoList);
+            }).toList(),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, Routes.addTask,
+                    arguments: {'todoList': todoLists[DefaultTabController
+                        .of(context)
+                        .index]}),
+            child: Icon(Icons.add),
+          ),
+        );
+      }),
+    );
   }
 
-  Center _buildEmptyContainer() => Center(child: Text('Empty'));
+  Scaffold _buildEmptyApp(ThemeData theme) {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buildEmptyItems(theme),
+    );
+  }
+
+  Center _buildEmptyItems(ThemeData theme, {TodoList todoList}) {
+    final Color fontColor = Colors.grey;
+    final TextStyle titleTextStyle = theme.textTheme.headline.copyWith(color: fontColor);
+    final TextStyle msgTextStyle = theme.textTheme.subhead.copyWith(color: fontColor);
+    final String msgTitle = 'Nothing to do';
+    final String msgNoTodoList = 'Start by creating a list in the menu above';
+    final String msgNoTodos = 'Create some tasks by tapping the +';
+    final String message = todoList == null ? msgNoTodoList : msgNoTodos;
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.local_cafe,
+            size: 128.0,
+            color: fontColor,
+          ),
+          SizedBox(height: 16),
+          Text(
+            msgTitle,
+            style: titleTextStyle,
+          ),
+          SizedBox(height: 32),
+          Text(message, style: msgTextStyle),
+        ],
+      ),
+    );
+  }
+
+  AppBar _buildAppBar({List<TodoList> todoLists}) {
+    return AppBar(
+        title: Text(title),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {},
+          ),
+          PopupMenuButton<String>(
+            onSelected: _onSelectMenuItem,
+            itemBuilder: (BuildContext context) =>
+            <PopupMenuEntry<String>>[
+              Helper.buildMenuItem(Icons.playlist_add, _addList),
+              Helper.buildMenuItem(Icons.settings, _openSettings),
+            ],
+          )
+        ],
+        bottom: todoLists == null ? null : _buildTabBar(todoLists));
+  }
+
+  TabBar _buildTabBar(List<TodoList> todoLists) {
+    return TabBar(
+      isScrollable: true,
+      tabs: todoLists.map((todoList) {
+        return Tab(text: todoList.title);
+      }).toList(),
+    );
+  }
 
   ListView _buildListView(TodoList todoList) {
     return ListView.separated(
