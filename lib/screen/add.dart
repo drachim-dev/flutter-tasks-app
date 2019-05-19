@@ -85,11 +85,10 @@ class _AddState extends State<Add> {
       actions: <Widget>[
         PopupMenuButton<String>(
           onSelected: _onSelectMenuItem,
-          itemBuilder: (BuildContext context) =>
-          <PopupMenuEntry<String>>[
-            Helper.buildMenuItem(
-                Icons.delete, AppLocalizations.of(context).deleteTodo(), _menuDeleteKey),
-          ],
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                Helper.buildMenuItem(
+                    Icons.delete, AppLocalizations.of(context).deleteTodo(), _menuDeleteKey),
+              ],
         )
       ],
       bottom: PreferredSize(

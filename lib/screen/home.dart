@@ -38,9 +38,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     if (_user == null) return _buildLoginScreen(context, theme);
 
     return StreamBuilder(
-        stream: TodoListProvider
-            .of(context)
-            .todoLists,
+        stream: TodoListProvider.of(context).todoLists,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<TodoList> todoLists = snapshot.data;
@@ -66,10 +64,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         children: <Widget>[
           Container(
             color: theme.accentColor,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 2.5,
+            height: MediaQuery.of(context).size.height / 2.5,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -135,11 +130,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: AppLocalizations.of(context).addTodo(),
-            onPressed: () =>
-                Navigator.pushNamed(context, Routes.addTask,
-                    arguments: {'todoList': todoLists[DefaultTabController
-                        .of(context)
-                        .index]}),
+            onPressed: () => Navigator.pushNamed(context, Routes.addTask,
+                arguments: {'todoList': todoLists[DefaultTabController.of(context).index]}),
             child: Icon(Icons.add),
           ),
         );
@@ -200,13 +192,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           PopupMenuButton<String>(
             onSelected: _onSelectMenuItem,
-            itemBuilder: (BuildContext context) =>
-            <PopupMenuEntry<String>>[
-              Helper.buildMenuItem(
-                  Icons.playlist_add, AppLocalizations.of(context).addList(), _menuAddListKey),
-              Helper.buildMenuItem(Icons.settings, AppLocalizations.of(context).menuSettings(),
-                  _menuSettingsKey),
-            ],
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  Helper.buildMenuItem(
+                      Icons.playlist_add, AppLocalizations.of(context).addList(), _menuAddListKey),
+                  Helper.buildMenuItem(Icons.settings, AppLocalizations.of(context).menuSettings(),
+                      _menuSettingsKey),
+                ],
           )
         ],
         bottom: todoLists == null ? null : _buildTabBar(todoLists));
@@ -233,7 +224,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   ListTile _buildListItem(Todo todo, TodoList todoList) {
     final TextStyle textStyle =
-    TextStyle(decoration: todo.complete ? TextDecoration.lineThrough : null);
+        TextStyle(decoration: todo.complete ? TextDecoration.lineThrough : null);
 
     return ListTile(
         leading: Checkbox(
@@ -260,8 +251,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   void _addTodoList() {
     Helper.showInputDialog(context,
-        title: AppLocalizations.of(context).addList(),
-        hint: AppLocalizations.of(context).nameOfList())
+            title: AppLocalizations.of(context).addList(),
+            hint: AppLocalizations.of(context).nameOfList())
         .then((input) {
       if (input == null || input.isEmpty) {
       } else {

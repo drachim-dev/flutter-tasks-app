@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
             return Add(todoList: map['todoList'], todo: map['todo']);
             break;
           default:
-          // The other paths we support are in the routes table.
+            // The other paths we support are in the routes table.
             return null;
         }
       },
