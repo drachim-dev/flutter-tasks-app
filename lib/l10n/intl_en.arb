@@ -1,0 +1,99 @@
+{
+  "@@last_modified": "2019-05-19T19:35:24.601968",
+  "appTitle": "Tasks",
+  "@appTitle": {
+    "description": "Name of the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "getStartedMessage": "To get startet, press the button below",
+  "@getStartedMessage": {
+    "description": "Message explaining how to get startet",
+    "type": "text",
+    "placeholders": {}
+  },
+  "loginButtonLabel": "Turn on backup & sync",
+  "@loginButtonLabel": {
+    "description": "Label of the login button",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuSettings": "Settings",
+  "@menuSettings": {
+    "description": "Title for the settings screen",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuSort": "Sort",
+  "@menuSort": {
+    "description": "Sort the todos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuFilter": "Filter",
+  "@menuFilter": {
+    "description": "Filter the todos",
+    "type": "text",
+    "placeholders": {}
+  },
+  "emptyMessageTitle": "Nothing to do",
+  "@emptyMessageTitle": {
+    "description": "Empty message title when there are no items",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hintCreateTodoLists": "Start by creating a list in the menu above",
+  "@hintCreateTodoLists": {
+    "description": "Message which explains how to create a todoList",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hintCreateTodos": "Create some tasks by tapping the +",
+  "@hintCreateTodos": {
+    "description": "Message which explains how to create a todo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "addList": "Add list",
+  "@addList": {
+    "description": "Add a new list",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nameOfList": "Name",
+    "@nameOfList": {
+      "description": "Name of the list",
+      "type": "text",
+      "placeholders": {}
+    },
+  "addTodo": "Add task",
+  "@addTodo": {
+    "description": "Add a new todo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "createTodo": "Create todo",
+  "@createTodo": {
+    "description": "Create the todo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "deleteTodo": "Delete",
+  "@deleteTodo": {
+    "description": "Delete the todo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "todoTitle": "Title",
+  "@todoTitle": {
+    "description": "Title of the todo",
+    "type": "text",
+    "placeholders": {}
+  },
+  "todoDesc": "Description",
+  "@todoDesc": {
+    "description": "Description of the todo",
+    "type": "text",
+    "placeholders": {}
+  }
+}

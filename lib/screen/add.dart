@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
+import 'package:tasks_flutter_v2/localizations.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
@@ -18,7 +19,7 @@ class _AddState extends State<Add> {
   final TodoList todoList;
   final Todo todo;
 
-  static const String _deleteTodo = 'Delete';
+  static const String _menuDeleteKey = '_menuDeleteKey';
 
   TextEditingController _titleController;
   TextEditingController _descController;
@@ -62,6 +63,7 @@ class _AddState extends State<Add> {
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.send),
+          tooltip: AppLocalizations.of(context).createTodo(),
           onPressed: () {
             todo.title = _titleController.text;
             todo.note = _descController.text;
@@ -85,7 +87,8 @@ class _AddState extends State<Add> {
           onSelected: _onSelectMenuItem,
           itemBuilder: (BuildContext context) =>
           <PopupMenuEntry<String>>[
-            Helper.buildMenuItem(Icons.delete, _deleteTodo),
+            Helper.buildMenuItem(
+                Icons.delete, AppLocalizations.of(context).deleteTodo(), _menuDeleteKey),
           ],
         )
       ],
@@ -100,7 +103,7 @@ class _AddState extends State<Add> {
 
   void _onSelectMenuItem(String value) {
     switch (value) {
-      case _deleteTodo:
+      case _menuDeleteKey:
         TodoListProvider.of(context).deleteTodos(todoList, [todo]);
         Navigator.pop(context);
         break;
@@ -118,7 +121,7 @@ class _AddState extends State<Add> {
       textCapitalization: TextCapitalization.sentences,
       controller: _titleController,
       decoration: InputDecoration(
-        hintText: 'Title',
+        hintText: AppLocalizations.of(context).todoTitle(),
         hintStyle: TextStyle(color: titleHintColor),
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       ),
@@ -135,7 +138,7 @@ class _AddState extends State<Add> {
       controller: _descController,
       decoration: InputDecoration(
         alignLabelWithHint: true,
-        labelText: 'Description',
+        labelText: AppLocalizations.of(context).todoDesc(),
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
         filled: true,
       ),

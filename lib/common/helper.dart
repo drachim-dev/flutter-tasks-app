@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Helper {
-  static PopupMenuItem<String> buildMenuItem(IconData icon, String label) {
+  static PopupMenuItem<String> buildMenuItem(IconData icon, String label, String key) {
     return PopupMenuItem<String>(
-      value: label,
+      value: key,
       child: Row(
         children: <Widget>[
           Padding(padding: const EdgeInsets.only(right: 24.0), child: Icon(icon)),

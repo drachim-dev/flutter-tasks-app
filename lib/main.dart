@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:tasks_flutter_v2/localizations.dart';
 import 'package:tasks_flutter_v2/repository/repository.dart';
 import 'package:tasks_flutter_v2/routes.dart';
 import 'package:tasks_flutter_v2/screen/add.dart';
@@ -10,10 +12,8 @@ main() {
 }
 
 class MyApp extends StatelessWidget {
-  static const String _title = 'Tasks';
-
   final Map _routes = <String, WidgetBuilder>{
-    Routes.home: (BuildContext context) => Home(title: _title),
+    Routes.home: (BuildContext context) => Home(),
   };
 
   Route _getRoute(RouteSettings settings) {
@@ -42,11 +42,20 @@ class MyApp extends StatelessWidget {
     return TodoListProvider(
       repository: Repository(),
       child: MaterialApp(
-        title: _title,
+        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle(),
         theme: _theme(),
-        home: Home(title: _title),
+        home: Home(),
         routes: _routes,
         onGenerateRoute: _getRoute,
+        localizationsDelegates: [
+          const AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('de', ''),
+        ],
       ),
     );
   }
