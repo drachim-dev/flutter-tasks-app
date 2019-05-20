@@ -47,9 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           // TodoListProvider.of(context).setUser(user);
 
           return StreamBuilder(
-              stream: TodoListProvider
-                  .of(context)
-                  .todoLists,
+              stream: TodoListProvider.of(context).todoLists,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List<TodoList> todoLists = snapshot.data;

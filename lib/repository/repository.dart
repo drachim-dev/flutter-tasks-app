@@ -35,9 +35,8 @@ class Repository {
   Future<void> updateTodo(TodoList todoList, Todo todo) =>
       _todoRepository.updateTodo(todoList.toEntity(), todo.toEntity());
 
-  Future<void> deleteTodos(TodoList todoList, List<Todo> todos) =>
-      _todoRepository.deleteTodos(
-          todoList.toEntity(), todos.map((todo) => todo.toEntity()).toList());
+  Future<void> deleteTodos(TodoList todoList, List<Todo> todos) => _todoRepository.deleteTodos(
+      todoList.toEntity(), todos.map((todo) => todo.toEntity()).toList());
 
   Stream<List<TodoListEntity>> todoLists() => _todoRepository.todoLists();
 }
