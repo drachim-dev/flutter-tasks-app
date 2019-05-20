@@ -17,6 +17,8 @@ class Repository {
 
   Future<UserEntity> loginViaGoogle() => _userRepository.loginViaGoogle();
 
+  Future<UserEntity> getCurrentUser() => _userRepository.getCurrentUser();
+
   Future<void> logout() => _userRepository.logout();
 
   Future<void> addTodoList(TodoList todoList) => _todoRepository.addTodoList(todoList.toEntity());

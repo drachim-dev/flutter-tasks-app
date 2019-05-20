@@ -18,7 +18,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _menuAddListKey = '_menuAddListKey';
   static const String _menuSettingsKey = '_menuSettingsKey';
 
-  UserEntity _user;
   bool _progress = false;
 
   @override
@@ -35,17 +34,32 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    if (_user == null) return _buildLoginScreen(context, theme);
-
-    return StreamBuilder(
-        stream: TodoListProvider.of(context).todoLists,
+    return FutureBuilder(
+        future: TodoListProvider.of(context).getCurrentUser(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final List<TodoList> todoLists = snapshot.data;
-            return todoLists.isEmpty ? _buildEmptyApp(theme) : _buildApp(context, theme, todoLists);
-          } else {
-            return Container();
+          // not logged in
+          if (!snapshot.hasData) {
+            return _buildLoginScreen(context, theme);
           }
+
+          // logged in
+          final UserEntity user = snapshot.data;
+          // TodoListProvider.of(context).setUser(user);
+
+          return StreamBuilder(
+              stream: TodoListProvider
+                  .of(context)
+                  .todoLists,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final List<TodoList> todoLists = snapshot.data;
+                  return todoLists.isEmpty
+                      ? _buildEmptyApp(theme)
+                      : _buildApp(context, theme, todoLists);
+                } else {
+                  return Container();
+                }
+              });
         });
   }
 
@@ -97,7 +111,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
                     TodoListProvider.of(context).loginViaGoogle().then((user) {
                       setState(() {
-                        _user = user;
                         _progress = false;
                       });
                     });

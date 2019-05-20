@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class UserEntity {
   final String id;
   final String displayName;
@@ -8,11 +10,11 @@ class UserEntity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserEntity &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          displayName == other.displayName &&
-          photoUrl == other.photoUrl;
+          other is UserEntity &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              displayName == other.displayName &&
+              photoUrl == other.photoUrl;
 
   @override
   int get hashCode => id.hashCode ^ displayName.hashCode ^ photoUrl.hashCode;
@@ -20,5 +22,13 @@ class UserEntity {
   @override
   String toString() {
     return 'UserEntity{id: $id, displayName: $displayName, photoUrl: $photoUrl}';
+  }
+
+  static UserEntity fromFirebaseUser(FirebaseUser firebaseUser) {
+    return UserEntity(
+      id: firebaseUser.uid,
+      displayName: firebaseUser.displayName,
+      photoUrl: firebaseUser.photoUrl,
+    );
   }
 }

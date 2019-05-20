@@ -15,6 +15,8 @@ class TodoListBloc {
 
   Future<UserEntity> loginViaGoogle() => repository.loginViaGoogle();
 
+  Future<UserEntity> getCurrentUser() => repository.getCurrentUser();
+
   Future<void> logout() => repository.logout();
 
   Stream<List<TodoList>> get todoLists {

@@ -6,9 +6,9 @@ import 'package:tasks_flutter_v2/model/user_entity.dart';
 
 abstract class UserRepository {
   Future<UserEntity> loginAnonymously();
-
   Future<UserEntity> loginViaGoogle();
 
+  Future<UserEntity> getCurrentUser();
   Future<void> logout();
 }
 
@@ -21,12 +21,7 @@ class FirebaseUserRepository implements UserRepository {
   @override
   Future<UserEntity> loginAnonymously() async {
     final FirebaseUser firebaseUser = await auth.signInAnonymously();
-
-    return UserEntity(
-      id: firebaseUser.uid,
-      displayName: firebaseUser.displayName,
-      photoUrl: firebaseUser.photoUrl,
-    );
+    return UserEntity.fromFirebaseUser(firebaseUser);
   }
 
   @override
@@ -39,12 +34,13 @@ class FirebaseUserRepository implements UserRepository {
     );
 
     final FirebaseUser firebaseUser = await auth.signInWithCredential(credential);
+    return UserEntity.fromFirebaseUser(firebaseUser);
+  }
 
-    return UserEntity(
-      id: firebaseUser.uid,
-      displayName: firebaseUser.displayName,
-      photoUrl: firebaseUser.photoUrl,
-    );
+  @override
+  Future<UserEntity> getCurrentUser() async {
+    final FirebaseUser firebaseUser = await auth.currentUser();
+    return UserEntity.fromFirebaseUser(firebaseUser);
   }
 
   @override
