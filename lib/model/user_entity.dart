@@ -10,11 +10,11 @@ class UserEntity {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is UserEntity &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              displayName == other.displayName &&
-              photoUrl == other.photoUrl;
+      other is UserEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          displayName == other.displayName &&
+          photoUrl == other.photoUrl;
 
   @override
   int get hashCode => id.hashCode ^ displayName.hashCode ^ photoUrl.hashCode;
