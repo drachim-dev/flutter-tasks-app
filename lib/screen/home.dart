@@ -19,6 +19,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _menuSettingsKey = '_menuSettingsKey';
 
   bool _progress = false;
+  UserEntity _user;
 
   @override
   void initState() {
@@ -43,11 +44,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           }
 
           // logged in
-          final UserEntity user = snapshot.data;
-          // TodoListProvider.of(context).setUser(user);
-
+          _user = snapshot.data;
           return StreamBuilder(
-              stream: TodoListProvider.of(context).todoLists,
+              stream: TodoListProvider.of(context).todoLists(_user),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List<TodoList> todoLists = snapshot.data;
@@ -141,8 +140,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: AppLocalizations.of(context).addTodo(),
-            onPressed: () => Navigator.pushNamed(context, Routes.addTask,
-                arguments: {'todoList': todoLists[DefaultTabController.of(context).index]}),
+            onPressed: () => Navigator.pushNamed(context, Routes.addTask, arguments: {
+                  'user': _user,
+                  'todoList': todoLists[DefaultTabController.of(context).index]
+                }),
             child: Icon(Icons.add),
           ),
         );
@@ -268,17 +269,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       if (input == null || input.isEmpty) {
       } else {
         final TodoList todoList = TodoList(title: input);
-        TodoListProvider.of(context).addTodoList(todoList);
+        TodoListProvider.of(context).addTodoList(_user, todoList);
       }
     });
   }
 
   void _toggleTodo(TodoList todoList, Todo todo, bool isChecked) {
     todo.complete = isChecked;
-    TodoListProvider.of(context).updateTodo(todoList, todo);
+    TodoListProvider.of(context).updateTodo(_user, todoList, todo);
   }
 
   void _tapTodo(final TodoList todoList, final Todo todo) {
-    Navigator.pushNamed(context, Routes.editTask, arguments: {'todoList': todoList, 'todo': todo});
+    Navigator.pushNamed(context, Routes.editTask,
+        arguments: {'user': _user, 'todoList': todoList, 'todo': todo});
   }
 }

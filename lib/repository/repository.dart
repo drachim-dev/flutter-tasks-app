@@ -21,22 +21,26 @@ class Repository {
 
   Future<void> logout() => _userRepository.logout();
 
-  Future<void> addTodoList(TodoList todoList) => _todoRepository.addTodoList(todoList.toEntity());
+  Future<void> addTodoList(UserEntity user, TodoList todoList) =>
+      _todoRepository.addTodoList(user, todoList.toEntity());
 
-  Future<void> updateTodoList(TodoList todoList) =>
-      _todoRepository.updateTodoList(todoList.toEntity());
+  Future<void> updateTodoList(UserEntity user, TodoList todoList) =>
+      _todoRepository.updateTodoList(user, todoList.toEntity());
 
-  Future<void> deleteTodoLists(List<TodoList> todoLists) =>
-      _todoRepository.deleteTodoLists(todoLists.map((todoList) => todoList.toEntity()).toList());
+  Future<void> deleteTodoLists(UserEntity user, List<TodoList> todoLists) => _todoRepository
+      .deleteTodoLists(user, todoLists.map((todoList) => todoList.toEntity()).toList());
 
-  Future<void> addTodo(TodoList todoList, Todo todo) =>
-      _todoRepository.addTodo(todoList.toEntity(), todo.toEntity());
+  Future<void> addTodo(UserEntity user, TodoList todoList, Todo todo) =>
+      _todoRepository.addTodo(user, todoList.toEntity(), todo.toEntity());
 
-  Future<void> updateTodo(TodoList todoList, Todo todo) =>
-      _todoRepository.updateTodo(todoList.toEntity(), todo.toEntity());
+  Future<void> updateTodo(UserEntity user, TodoList todoList, Todo todo) =>
+      _todoRepository.updateTodo(user, todoList.toEntity(), todo.toEntity());
 
-  Future<void> deleteTodos(TodoList todoList, List<Todo> todos) => _todoRepository.deleteTodos(
-      todoList.toEntity(), todos.map((todo) => todo.toEntity()).toList());
+  Future<void> deleteTodos(UserEntity user, TodoList todoList, List<Todo> todos) => _todoRepository
+      .deleteTodos(user, todoList.toEntity(), todos.map((todo) => todo.toEntity()).toList());
 
-  Stream<List<TodoListEntity>> todoLists() => _todoRepository.todoLists();
+  Stream<List<TodoListEntity>> todoLists(
+    UserEntity user,
+  ) =>
+      _todoRepository.todoLists(user);
 }

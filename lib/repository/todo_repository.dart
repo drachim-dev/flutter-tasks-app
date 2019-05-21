@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tasks_flutter_v2/model/todo_entity.dart';
 import 'package:tasks_flutter_v2/model/todo_list_entity.dart';
+import 'package:tasks_flutter_v2/model/user_entity.dart';
 
 abstract class TodoRepository {
-  Future<void> addTodoList(TodoListEntity todoList);
+  Future<void> addTodoList(UserEntity user, TodoListEntity todoList);
 
-  Future<void> updateTodoList(TodoListEntity todoList);
+  Future<void> updateTodoList(UserEntity user, TodoListEntity todoList);
 
-  Future<void> deleteTodoLists(List<TodoListEntity> todoLists);
+  Future<void> deleteTodoLists(UserEntity user, List<TodoListEntity> todoLists);
 
-  Future<void> addTodo(TodoListEntity todoList, TodoEntity todo);
+  Future<void> addTodo(UserEntity user, TodoListEntity todoList, TodoEntity todo);
 
-  Future<void> updateTodo(TodoListEntity todoList, TodoEntity todo);
+  Future<void> updateTodo(UserEntity user, TodoListEntity todoList, TodoEntity todo);
 
-  Future<void> deleteTodos(TodoListEntity todoList, List<TodoEntity> idList);
+  Future<void> deleteTodos(UserEntity user, TodoListEntity todoList, List<TodoEntity> idList);
 
-  Stream<List<TodoListEntity>> todoLists();
+  Stream<List<TodoListEntity>> todoLists(UserEntity user);
 }
 
 class FirestoreTodoRepository implements TodoRepository {
+  static const String usersPath = 'users';
   static const String tasklistsPath = 'tasklists';
 
   final Firestore firestore;
@@ -26,40 +28,55 @@ class FirestoreTodoRepository implements TodoRepository {
   const FirestoreTodoRepository(this.firestore);
 
   @override
-  Future<void> addTodoList(TodoListEntity todoList) {
-    return firestore.collection(tasklistsPath).document(todoList.id).setData(todoList.toJson());
+  Future<void> addTodoList(UserEntity user, TodoListEntity todoList) {
+    return firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(todoList.id)
+        .setData(todoList.toJson());
   }
 
   @override
-  Future<void> updateTodoList(TodoListEntity todoList) {
-    return firestore.collection(tasklistsPath).document(todoList.id).updateData(todoList.toJson());
+  Future<void> updateTodoList(UserEntity user, TodoListEntity todoList) {
+    return firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(todoList.id)
+        .updateData(todoList.toJson());
   }
 
   @override
-  Future<void> deleteTodoLists(List<TodoListEntity> todoLists) async {}
+  Future<void> deleteTodoLists(UserEntity user, List<TodoListEntity> todoLists) async {}
 
   @override
-  Future<void> addTodo(TodoListEntity todoList, final TodoEntity todo) {
+  Future<void> addTodo(UserEntity user, TodoListEntity todoList, final TodoEntity todo) {
     todoList.todos.add(todo);
-    return updateTodoList(todoList);
+    return updateTodoList(user, todoList);
   }
 
   @override
-  Future<void> updateTodo(TodoListEntity todoList, final TodoEntity todo) {
+  Future<void> updateTodo(UserEntity user, TodoListEntity todoList, final TodoEntity todo) {
     int index = todoList.todos.indexOf(todo);
     todoList.todos[index] = todo;
-    return updateTodoList(todoList);
+    return updateTodoList(user, todoList);
   }
 
   @override
-  Future<void> deleteTodos(TodoListEntity todoList, final List<TodoEntity> todos) {
+  Future<void> deleteTodos(UserEntity user, TodoListEntity todoList, final List<TodoEntity> todos) {
     todos.forEach((todo) => todoList.todos.remove(todo));
-    return updateTodoList(todoList);
+    return updateTodoList(user, todoList);
   }
 
   @override
-  Stream<List<TodoListEntity>> todoLists() {
-    return firestore.collection(tasklistsPath).snapshots().map((snapshot) {
+  Stream<List<TodoListEntity>> todoLists(UserEntity user) {
+    return firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.documents.map((doc) {
         return TodoListEntity(
             id: doc.documentID,

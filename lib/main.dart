@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context) {
         switch (settings.name) {
           case Routes.addTask:
-            return Add(todoList: map['todoList']);
+            return Add(user: map['user'], todoList: map['todoList']);
             break;
           case Routes.editTask:
-            return Add(todoList: map['todoList'], todo: map['todo']);
+            return Add(user: map['user'], todoList: map['todoList'], todo: map['todo']);
             break;
           default:
             // The other paths we support are in the routes table.

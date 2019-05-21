@@ -3,19 +3,22 @@ import 'package:tasks_flutter_v2/common/helper.dart';
 import 'package:tasks_flutter_v2/localizations.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
+import 'package:tasks_flutter_v2/model/user_entity.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
 
 class Add extends StatefulWidget {
-  Add({@required this.todoList, this.todo});
+  Add({@required this.user, @required this.todoList, this.todo});
 
+  final UserEntity user;
   final TodoList todoList;
   final Todo todo;
 
   @override
-  _AddState createState() => _AddState(todoList: todoList, todo: todo);
+  _AddState createState() => _AddState(user: user, todoList: todoList, todo: todo);
 }
 
 class _AddState extends State<Add> {
+  final UserEntity user;
   final TodoList todoList;
   final Todo todo;
 
@@ -24,7 +27,8 @@ class _AddState extends State<Add> {
   TextEditingController _titleController;
   TextEditingController _descController;
 
-  _AddState({@required this.todoList, Todo todo}) : todo = todo ?? Todo(position: 0);
+  _AddState({@required this.user, @required this.todoList, Todo todo})
+      : todo = todo ?? Todo(position: 0);
 
   @override
   void initState() {
@@ -69,9 +73,9 @@ class _AddState extends State<Add> {
             todo.note = _descController.text;
 
             if (todo.id == null) {
-              TodoListProvider.of(context).addTodo(todoList, todo);
+              TodoListProvider.of(context).addTodo(user, todoList, todo);
             } else {
-              TodoListProvider.of(context).updateTodo(todoList, todo);
+              TodoListProvider.of(context).updateTodo(user, todoList, todo);
             }
 
             Navigator.pop(context);
@@ -103,7 +107,7 @@ class _AddState extends State<Add> {
   void _onSelectMenuItem(String value) {
     switch (value) {
       case _menuDeleteKey:
-        TodoListProvider.of(context).deleteTodos(todoList, [todo]);
+        TodoListProvider.of(context).deleteTodos(user, todoList, [todo]);
         Navigator.pop(context);
         break;
       default:

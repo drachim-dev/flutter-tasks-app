@@ -19,20 +19,25 @@ class TodoListBloc {
 
   Future<void> logout() => repository.logout();
 
-  Stream<List<TodoList>> get todoLists {
-    return repository.todoLists().map((entities) => entities.map(TodoList.fromEntity).toList());
+  Stream<List<TodoList>> todoLists(UserEntity user) {
+    return repository.todoLists(user).map((entities) => entities.map(TodoList.fromEntity).toList());
   }
 
-  Future<void> addTodoList(TodoList todoList) => repository.addTodoList(todoList);
+  Future<void> addTodoList(UserEntity user, TodoList todoList) =>
+      repository.addTodoList(user, todoList);
 
-  Future<void> updateTodoList(TodoList todoList) => repository.updateTodoList(todoList);
+  Future<void> updateTodoList(UserEntity user, TodoList todoList) =>
+      repository.updateTodoList(user, todoList);
 
-  Future<void> deleteTodoLists(List<TodoList> todoLists) => repository.deleteTodoLists(todoLists);
+  Future<void> deleteTodoLists(UserEntity user, List<TodoList> todoLists) =>
+      repository.deleteTodoLists(user, todoLists);
 
-  Future<void> updateTodo(TodoList todoList, Todo todo) => repository.updateTodo(todoList, todo);
+  Future<void> updateTodo(UserEntity user, TodoList todoList, Todo todo) =>
+      repository.updateTodo(user, todoList, todo);
 
-  Future<void> addTodo(TodoList todoList, Todo todo) => repository.addTodo(todoList, todo);
+  Future<void> addTodo(UserEntity user, TodoList todoList, Todo todo) =>
+      repository.addTodo(user, todoList, todo);
 
-  Future<void> deleteTodos(TodoList todoList, List<Todo> todos) =>
-      repository.deleteTodos(todoList, todos);
+  Future<void> deleteTodos(UserEntity user, TodoList todoList, List<Todo> todos) =>
+      repository.deleteTodos(user, todoList, todos);
 }
