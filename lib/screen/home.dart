@@ -268,8 +268,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void _addTodoList() {
     Helper.showInputDialog(context, title: S.of(context).addList, hint: S.of(context).nameOfList)
         .then((input) {
-      if (input == null || input.isEmpty) {
-      } else {
+      if (input != null && input.isNotEmpty) {
         final TodoList todoList = TodoList(title: input);
         TodoListProvider.of(context).addTodoList(_user, todoList);
       }

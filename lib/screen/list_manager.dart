@@ -55,8 +55,16 @@ class ListManager extends StatelessWidget {
   void _onSelectMenuItem(String value, BuildContext context, TodoList todoList) {
     switch (value) {
       case _menuRenameListKey:
-        // TODO: Show dialog for renaming title
-        TodoListProvider.of(context).updateTodoList(user, todoList);
+        Helper.showInputDialog(context,
+                title: S.of(context).renameList,
+                hint: S.of(context).nameOfList,
+                input: todoList.title)
+            .then((input) {
+          if (input != null && input.isNotEmpty) {
+            todoList.title = input;
+            TodoListProvider.of(context).updateTodoList(user, todoList);
+          }
+        });
         break;
       case _menuDeleteListKey:
         TodoListProvider.of(context).deleteTodoLists(user, [todoList]);

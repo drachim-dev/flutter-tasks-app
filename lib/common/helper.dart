@@ -13,7 +13,7 @@ class Helper {
     );
   }
 
-  static Future showInputDialog(BuildContext context,
+  static Future<String> showInputDialog(BuildContext context,
       {@required String title, @required String hint, String input}) {
     const String _cancel = 'Cancel';
     const String _confirm = 'Ok';
