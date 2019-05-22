@@ -1,0 +1,20 @@
+{
+  "appTitle": "Tasks",
+  "getStartedMessage": "Um zu beginnen, bitte den Button unten drücken",
+  "loginButtonLabel": "Backup & Sync aktivieren",
+  "menuSettings": "Einstellungen",
+  "menuSort": "Sortieren",
+  "menuFilter": "Filtern",
+  "emptyMessageTitle": "Alles erledigt",
+  "hintCreateTodoLists": "Erstelle oben im Menü eine neue Liste",
+  "hintCreateTodos": "Erstelle neue Aufgaben, indem du + drückst",
+  "addList": "Liste hinzufügen",
+  "deleteList": "Liste löschen",
+  "renameList": "Liste umbenennen",
+  "nameOfList": "Name",
+  "addTodo": "Aufgabe hinzufügen",
+  "createTodo": "Aufgabe erstellen",
+  "deleteTodo": "Löschen",
+  "todoTitle": "Titel",
+  "todoDesc": "Beschreibung"
+}

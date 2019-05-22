@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
-import 'package:tasks_flutter_v2/localizations.dart';
+import 'package:tasks_flutter_v2/generated/i18n.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
 import 'package:tasks_flutter_v2/model/user_entity.dart';
@@ -84,7 +84,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   size: titleIconSize,
                   color: titleColor,
                 ),
-                Text(AppLocalizations.of(context).appTitle(), style: titleTextStyle)
+                Text(S
+                    .of(context)
+                    .appTitle, style: titleTextStyle)
               ],
             ),
           ),
@@ -93,7 +95,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(AppLocalizations.of(context).getStartedMessage(), style: msgTextStyle),
+                Text(S
+                    .of(context)
+                    .getStartedMessage, style: msgTextStyle),
                 SizedBox(height: 32),
                 IconButton(
                   iconSize: msgIconSize,
@@ -114,7 +118,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   },
                 ),
                 Text(
-                  AppLocalizations.of(context).loginButtonLabel(),
+                  S
+                      .of(context)
+                      .loginButtonLabel,
                   style: msgTextStyle,
                 )
               ],
@@ -139,7 +145,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             }).toList(),
           ),
           floatingActionButton: FloatingActionButton(
-            tooltip: AppLocalizations.of(context).addTodo(),
+            tooltip: S
+                .of(context)
+                .addTodo,
             onPressed: () => Navigator.pushNamed(context, Routes.addTask, arguments: {
                   'user': _user,
                   'todoList': todoLists[DefaultTabController.of(context).index]
@@ -162,9 +170,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     final Color fontColor = Colors.grey;
     final TextStyle titleTextStyle = theme.textTheme.headline.copyWith(color: fontColor);
     final TextStyle msgTextStyle = theme.textTheme.subhead.copyWith(color: fontColor);
-    final String msgTitle = AppLocalizations.of(context).emptyMessageTitle();
-    final String msgNoTodoList = AppLocalizations.of(context).hintCreateTodoLists();
-    final String msgNoTodos = AppLocalizations.of(context).hintCreateTodos();
+    final String msgTitle = S
+        .of(context)
+        .emptyMessageTitle;
+    final String msgNoTodoList = S
+        .of(context)
+        .hintCreateTodoLists;
+    final String msgNoTodos = S
+        .of(context)
+        .hintCreateTodos;
     final String message = todoList == null ? msgNoTodoList : msgNoTodos;
 
     return Center(
@@ -190,25 +204,34 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   AppBar _buildAppBar({List<TodoList> todoLists}) {
     return AppBar(
-        title: Text(AppLocalizations.of(context).appTitle()),
+        title: Text(S
+            .of(context)
+            .appTitle),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.sort),
-            tooltip: AppLocalizations.of(context).menuSort(),
+            tooltip: S
+                .of(context)
+                .menuSort,
             onPressed: () {},
           ),
           IconButton(
             icon: Icon(Icons.filter_list),
-            tooltip: AppLocalizations.of(context).menuFilter(),
+            tooltip: S
+                .of(context)
+                .menuFilter,
             onPressed: () {},
           ),
           PopupMenuButton<String>(
             onSelected: _onSelectMenuItem,
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              Helper.buildMenuItem(Icons.playlist_add, S
+                  .of(context)
+                  .addList, _menuAddListKey),
                   Helper.buildMenuItem(
-                      Icons.playlist_add, AppLocalizations.of(context).addList(), _menuAddListKey),
-                  Helper.buildMenuItem(Icons.settings, AppLocalizations.of(context).menuSettings(),
-                      _menuSettingsKey),
+                      Icons.settings, S
+                      .of(context)
+                      .menuSettings, _menuSettingsKey),
                 ],
           )
         ],
@@ -262,9 +285,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   void _addTodoList() {
-    Helper.showInputDialog(context,
-            title: AppLocalizations.of(context).addList(),
-            hint: AppLocalizations.of(context).nameOfList())
+    Helper.showInputDialog(context, title: S
+        .of(context)
+        .addList, hint: S
+        .of(context)
+        .nameOfList)
         .then((input) {
       if (input == null || input.isEmpty) {
       } else {

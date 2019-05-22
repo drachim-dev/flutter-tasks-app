@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tasks_flutter_v2/localizations.dart';
 import 'package:tasks_flutter_v2/repository/repository.dart';
 import 'package:tasks_flutter_v2/routes.dart';
 import 'package:tasks_flutter_v2/screen/add.dart';
 import 'package:tasks_flutter_v2/screen/home.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
+
+import 'generated/i18n.dart';
 
 main() {
   runApp(new MyApp());
@@ -42,20 +43,20 @@ class MyApp extends StatelessWidget {
     return TodoListProvider(
       repository: Repository(),
       child: MaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle(),
+        onGenerateTitle: (context) =>
+        S
+            .of(context)
+            .appTitle,
         theme: _theme(),
         home: Home(),
         routes: _routes,
         onGenerateRoute: _getRoute,
-        localizationsDelegates: [
-          const AppLocalizationsDelegate(),
+        localizationsDelegates: const [
+          S.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        supportedLocales: [
-          const Locale('en', ''),
-          const Locale('de', ''),
-        ],
+        supportedLocales: S.delegate.supportedLocales,
       ),
     );
   }

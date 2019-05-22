@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
-import 'package:tasks_flutter_v2/localizations.dart';
+import 'package:tasks_flutter_v2/generated/i18n.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
 import 'package:tasks_flutter_v2/model/user_entity.dart';
@@ -67,7 +67,9 @@ class _AddState extends State<Add> {
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.send),
-          tooltip: AppLocalizations.of(context).createTodo(),
+          tooltip: S
+              .of(context)
+              .createTodo,
           onPressed: () {
             todo.title = _titleController.text;
             todo.note = _descController.text;
@@ -90,8 +92,9 @@ class _AddState extends State<Add> {
         PopupMenuButton<String>(
           onSelected: _onSelectMenuItem,
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                Helper.buildMenuItem(
-                    Icons.delete, AppLocalizations.of(context).deleteTodo(), _menuDeleteKey),
+            Helper.buildMenuItem(Icons.delete, S
+                .of(context)
+                .deleteTodo, _menuDeleteKey),
               ],
         )
       ],
@@ -124,7 +127,9 @@ class _AddState extends State<Add> {
       textCapitalization: TextCapitalization.sentences,
       controller: _titleController,
       decoration: InputDecoration(
-        hintText: AppLocalizations.of(context).todoTitle(),
+        hintText: S
+            .of(context)
+            .todoTitle,
         hintStyle: TextStyle(color: titleHintColor),
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       ),
@@ -141,7 +146,9 @@ class _AddState extends State<Add> {
       controller: _descController,
       decoration: InputDecoration(
         alignLabelWithHint: true,
-        labelText: AppLocalizations.of(context).todoDesc(),
+        labelText: S
+            .of(context)
+            .todoDesc,
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
         filled: true,
       ),
