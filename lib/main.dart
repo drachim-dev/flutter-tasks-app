@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tasks_flutter_v2/repository/repository.dart';
 import 'package:tasks_flutter_v2/routes.dart';
-import 'package:tasks_flutter_v2/screen/add.dart';
-import 'package:tasks_flutter_v2/screen/home.dart';
 import 'package:tasks_flutter_v2/widget/todo_bloc_provider.dart';
 
 import 'generated/i18n.dart';
+import 'screen/add.dart';
+import 'screen/home.dart';
+import 'screen/list_manager.dart';
 
 main() {
   runApp(new MyApp());
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
             break;
           case Routes.editTask:
             return Add(user: map['user'], todoList: map['todoList'], todo: map['todo']);
+            break;
+          case Routes.manageLists:
+            return ListManager(user: map['user']);
             break;
           default:
             // The other paths we support are in the routes table.

@@ -29,6 +29,7 @@ class S implements WidgetsLocalizations {
   String get hintCreateTodoLists => "Start by creating a list in the menu above";
   String get hintCreateTodos => "Create some tasks by tapping the +";
   String get loginButtonLabel => "Turn on backup & sync";
+  String get manageLists => "Manage lists";
   String get menuFilter => "Filter";
   String get menuSettings => "Settings";
   String get menuSort => "Sort";
@@ -68,6 +69,8 @@ class $de extends S {
   String get menuSettings => "Einstellungen";
   @override
   String get addList => "Liste hinzufügen";
+  @override
+  String get manageLists => "Listen verwalten";
   @override
   String get renameList => "Liste umbenennen";
   @override

@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _menuAddListKey = '_menuAddListKey';
+  static const String _menuManageListsKey = '_menuManageListsKey';
   static const String _menuSettingsKey = '_menuSettingsKey';
 
   bool _progress = false;
@@ -206,6 +207,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             onSelected: _onSelectMenuItem,
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                   Helper.buildMenuItem(Icons.playlist_add, S.of(context).addList, _menuAddListKey),
+                  Helper.buildMenuItem(Icons.list, S.of(context).manageLists, _menuManageListsKey),
                   Helper.buildMenuItem(
                       Icons.settings, S.of(context).menuSettings, _menuSettingsKey),
                 ],
@@ -253,6 +255,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     switch (value) {
       case _menuAddListKey:
         _addTodoList();
+        break;
+      case _menuManageListsKey:
+        Navigator.pushNamed(context, Routes.manageLists, arguments: {'user': _user});
         break;
       case _menuSettingsKey:
         break;

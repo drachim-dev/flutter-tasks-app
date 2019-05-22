@@ -9,6 +9,7 @@
   "hintCreateTodoLists": "Erstelle oben im Menü eine neue Liste",
   "hintCreateTodos": "Erstelle neue Aufgaben, indem du + drückst",
   "addList": "Liste hinzufügen",
+  "manageLists": "Listen verwalten",
   "deleteList": "Liste löschen",
   "renameList": "Liste umbenennen",
   "nameOfList": "Name",

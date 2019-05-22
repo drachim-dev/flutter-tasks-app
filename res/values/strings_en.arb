@@ -9,6 +9,7 @@
   "hintCreateTodoLists": "Start by creating a list in the menu above",
   "hintCreateTodos": "Create some tasks by tapping the +",
   "addList": "Add list",
+  "manageLists": "Manage lists",
   "deleteList": "Delete list",
   "renameList": "Rename list",
   "nameOfList": "Name",

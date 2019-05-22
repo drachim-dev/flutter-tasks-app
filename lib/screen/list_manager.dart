@@ -14,25 +14,30 @@ class ListManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: TodoListProvider.of(context).todoLists(user),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final List<TodoList> todoLists = snapshot.data;
-            return ListView.separated(
-                itemBuilder: (context, index) {
-                  final TodoList todoList = todoLists[index];
-                  return ListTile(
-                    title: Text(todoList.title),
-                    trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: todoLists.length);
-          } else {
-            return Container();
-          }
-        });
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).manageLists),
+      ),
+      body: StreamBuilder(
+          stream: TodoListProvider.of(context).todoLists(user),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final List<TodoList> todoLists = snapshot.data;
+              return ListView.separated(
+                  itemBuilder: (context, index) {
+                    final TodoList todoList = todoLists[index];
+                    return ListTile(
+                      title: Text(todoList.title),
+                      trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(),
+                  itemCount: todoLists.length);
+            } else {
+              return Container();
+            }
+          }),
+    );
   }
 
   PopupMenuButton<String> _buildPopupMenuButton(BuildContext context, TodoList todoList,
@@ -50,6 +55,8 @@ class ListManager extends StatelessWidget {
   void _onSelectMenuItem(String value, BuildContext context, TodoList todoList) {
     switch (value) {
       case _menuRenameListKey:
+        // TODO: Show dialog for renaming title
+        TodoListProvider.of(context).updateTodoList(user, todoList);
         break;
       case _menuDeleteListKey:
         TodoListProvider.of(context).deleteTodoLists(user, [todoList]);
