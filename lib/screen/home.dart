@@ -21,6 +21,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   bool _progress = false;
   UserEntity _user;
+  List<TodoList> todoLists;
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               stream: TodoListProvider.of(context).todoLists(_user),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  final List<TodoList> todoLists = snapshot.data;
+                  todoLists = snapshot.data;
                   return todoLists.isEmpty
                       ? _buildEmptyApp(theme)
                       : _buildApp(context, theme, todoLists);
@@ -269,7 +270,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     Helper.showInputDialog(context, title: S.of(context).addList, hint: S.of(context).nameOfList)
         .then((input) {
       if (input != null && input.isNotEmpty) {
-        final TodoList todoList = TodoList(title: input);
+        final TodoList todoList =
+            TodoList(title: input, position: todoLists == null ? 0 : todoLists.length);
         TodoListProvider.of(context).addTodoList(_user, todoList);
       }
     });

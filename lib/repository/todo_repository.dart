@@ -71,20 +71,20 @@ class FirestoreTodoRepository implements TodoRepository {
 
   @override
   Stream<List<TodoListEntity>> todoLists(UserEntity user) {
-    return firestore
-        .collection(usersPath)
-        .document(user.id)
-        .collection(tasklistsPath)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.documents.map((doc) {
+    final Stream<QuerySnapshot> querySnapshot =
+        firestore.collection(usersPath).document(user.id).collection(tasklistsPath).snapshots();
+    return querySnapshot.map((snapshot) {
+      List<TodoListEntity> todoLists = snapshot.documents.map((doc) {
         return TodoListEntity(
             id: doc.documentID,
             title: doc['title'] ?? '',
             todos: List<TodoEntity>.from(doc['todos'].map((i) {
               return TodoEntity.fromJson(i);
-            })));
+            })),
+            position: doc['position']);
       }).toList();
+      todoLists.sort((a, b) => a.position.compareTo(b.position));
+      return todoLists;
     });
   }
 }

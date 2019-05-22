@@ -11,8 +11,7 @@ import 'package:flutter/material.dart';
 class S implements WidgetsLocalizations {
   const S();
 
-  static const GeneratedLocalizationsDelegate delegate =
-    GeneratedLocalizationsDelegate();
+  static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
 
@@ -38,6 +37,14 @@ class S implements WidgetsLocalizations {
   String get renameList => "Rename list";
   String get todoDesc => "Description";
   String get todoTitle => "Title";
+  String todos(dynamic todosCount) {
+    switch (todosCount.toString()) {
+      case "1":
+        return "$todosCount item";
+      default:
+        return "$todosCount items";
+    }
+  }
 }
 
 class $de extends S {
@@ -84,6 +91,15 @@ class $de extends S {
   String get createTodo => "Aufgabe erstellen";
   @override
   String get menuSort => "Sortieren";
+  @override
+  String todos(dynamic todosCount) {
+    switch (todosCount.toString()) {
+      case "1":
+        return "$todosCount Aufgabe";
+      default:
+        return "$todosCount Aufgaben";
+    }
+  }
 }
 
 class $en extends S {
@@ -126,7 +142,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         case "en":
           return SynchronousFuture<S>(const $en());
         default:
-          // NO-OP.
+        // NO-OP.
       }
     }
     return SynchronousFuture<S>(const S());
@@ -174,7 +190,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         }
 
         // If no country requirement is requested, check if this locale has no country.
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry &&
+            (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
@@ -184,7 +201,5 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
 }
 
 String getLang(Locale l) => l == null
-  ? null
-  : l.countryCode != null && l.countryCode.isEmpty
-    ? l.languageCode
-    : l.toString();
+    ? null
+    : l.countryCode != null && l.countryCode.isEmpty ? l.languageCode : l.toString();

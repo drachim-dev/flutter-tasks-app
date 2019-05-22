@@ -21,23 +21,25 @@ class ListManager extends StatelessWidget {
       body: StreamBuilder(
           stream: TodoListProvider.of(context).todoLists(user),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final List<TodoList> todoLists = snapshot.data;
-              return ListView.separated(
-                  itemBuilder: (context, index) {
-                    final TodoList todoList = todoLists[index];
-                    return ListTile(
-                      title: Text(todoList.title),
-                      trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(),
-                  itemCount: todoLists.length);
-            } else {
-              return Container();
-            }
+            return snapshot.hasData ? _buildReorderableList(context, snapshot.data) : Container();
           }),
     );
+  }
+
+  ReorderableListView _buildReorderableList(BuildContext context, List<TodoList> todoLists) {
+    return ReorderableListView(
+        children: todoLists.map((todoList) {
+          return Container(
+              margin: EdgeInsets.all(16.0),
+              key: Key(todoList.id),
+              child: ListTile(
+                leading: Icon(Icons.drag_handle),
+                title: Text(todoList.title),
+                subtitle: Text(S.of(context).todos(todoList.todos.length)),
+                trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
+              ));
+        }).toList(),
+        onReorder: (oldIndex, newIndex) => _onReorder(context, todoLists, oldIndex, newIndex));
   }
 
   PopupMenuButton<String> _buildPopupMenuButton(BuildContext context, TodoList todoList,
@@ -70,5 +72,18 @@ class ListManager extends StatelessWidget {
         TodoListProvider.of(context).deleteTodoLists(user, [todoList]);
         break;
     }
+  }
+
+  _onReorder(BuildContext context, List<TodoList> todoLists, oldIndex, newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final TodoList todoList = todoLists.removeAt(oldIndex);
+    todoLists.insert(newIndex, todoList);
+
+    todoLists.forEach((element) {
+      element.position = todoLists.indexOf(element);
+      TodoListProvider.of(context).updateTodoList(user, element);
+    });
   }
 }

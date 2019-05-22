@@ -17,5 +17,7 @@
   "createTodo": "Create task",
   "deleteTodo": "Delete",
   "todoTitle": "Title",
-  "todoDesc": "Description"
+  "todoDesc": "Description",
+  "todosOne": "$todosCount item",
+  "todosOther": "$todosCount items"
 }

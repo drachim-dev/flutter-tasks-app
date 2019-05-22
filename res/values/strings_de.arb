@@ -17,5 +17,7 @@
   "createTodo": "Aufgabe erstellen",
   "deleteTodo": "Löschen",
   "todoTitle": "Titel",
-  "todoDesc": "Beschreibung"
+  "todoDesc": "Beschreibung",
+  "todosOne": "$todosCount Aufgabe",
+  "todosOther": "$todosCount Aufgaben"
 }
