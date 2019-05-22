@@ -67,9 +67,7 @@ class _AddState extends State<Add> {
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.send),
-          tooltip: S
-              .of(context)
-              .createTodo,
+          tooltip: S.of(context).createTodo,
           onPressed: () {
             todo.title = _titleController.text;
             todo.note = _descController.text;
@@ -92,9 +90,7 @@ class _AddState extends State<Add> {
         PopupMenuButton<String>(
           onSelected: _onSelectMenuItem,
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            Helper.buildMenuItem(Icons.delete, S
-                .of(context)
-                .deleteTodo, _menuDeleteKey),
+                Helper.buildMenuItem(Icons.delete, S.of(context).deleteTodo, _menuDeleteKey),
               ],
         )
       ],
@@ -127,9 +123,7 @@ class _AddState extends State<Add> {
       textCapitalization: TextCapitalization.sentences,
       controller: _titleController,
       decoration: InputDecoration(
-        hintText: S
-            .of(context)
-            .todoTitle,
+        hintText: S.of(context).todoTitle,
         hintStyle: TextStyle(color: titleHintColor),
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
       ),
@@ -146,9 +140,7 @@ class _AddState extends State<Add> {
       controller: _descController,
       decoration: InputDecoration(
         alignLabelWithHint: true,
-        labelText: S
-            .of(context)
-            .todoDesc,
+        labelText: S.of(context).todoDesc,
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
         filled: true,
       ),

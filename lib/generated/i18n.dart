@@ -19,39 +19,22 @@ class S implements WidgetsLocalizations {
   TextDirection get textDirection => TextDirection.ltr;
 
   String get addList => "Add list";
-
   String get addTodo => "Add task";
-
   String get appTitle => "Tasks";
-
   String get createTodo => "Create task";
-
   String get deleteList => "Delete list";
-
   String get deleteTodo => "Delete";
-
   String get emptyMessageTitle => "Nothing to do";
-
   String get getStartedMessage => "To get startet, press the button below";
-
   String get hintCreateTodoLists => "Start by creating a list in the menu above";
-
   String get hintCreateTodos => "Create some tasks by tapping the +";
-
   String get loginButtonLabel => "Turn on backup & sync";
-
   String get menuFilter => "Filter";
-
   String get menuSettings => "Settings";
-
   String get menuSort => "Sort";
-
   String get nameOfList => "Name";
-
   String get renameList => "Rename list";
-
   String get todoDesc => "Description";
-
   String get todoTitle => "Title";
 }
 
@@ -63,55 +46,38 @@ class $de extends S {
 
   @override
   String get deleteList => "Liste löschen";
-
   @override
   String get nameOfList => "Name";
-
   @override
   String get getStartedMessage => "Um zu beginnen, bitte den Button unten drücken";
-
   @override
   String get todoDesc => "Beschreibung";
-
   @override
   String get loginButtonLabel => "Backup & Sync aktivieren";
-
   @override
   String get appTitle => "Tasks";
-
   @override
   String get hintCreateTodoLists => "Erstelle oben im Menü eine neue Liste";
-
   @override
   String get hintCreateTodos => "Erstelle neue Aufgaben, indem du + drückst";
-
   @override
   String get addTodo => "Aufgabe hinzufügen";
-
   @override
   String get emptyMessageTitle => "Alles erledigt";
-
   @override
   String get menuSettings => "Einstellungen";
-
   @override
   String get addList => "Liste hinzufügen";
-
   @override
   String get renameList => "Liste umbenennen";
-
   @override
   String get menuFilter => "Filtern";
-
   @override
   String get deleteTodo => "Löschen";
-
   @override
   String get todoTitle => "Titel";
-
   @override
   String get createTodo => "Aufgabe erstellen";
-
   @override
   String get menuSort => "Sortieren";
 }

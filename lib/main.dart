@@ -43,10 +43,7 @@ class MyApp extends StatelessWidget {
     return TodoListProvider(
       repository: Repository(),
       child: MaterialApp(
-        onGenerateTitle: (context) =>
-        S
-            .of(context)
-            .appTitle,
+        onGenerateTitle: (context) => S.of(context).appTitle,
         theme: _theme(),
         home: Home(),
         routes: _routes,
