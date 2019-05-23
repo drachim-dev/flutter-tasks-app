@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 class S implements WidgetsLocalizations {
   const S();
 
-  static const GeneratedLocalizationsDelegate delegate = GeneratedLocalizationsDelegate();
+  static const GeneratedLocalizationsDelegate delegate =
+    GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
 
@@ -142,7 +143,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         case "en":
           return SynchronousFuture<S>(const $en());
         default:
-        // NO-OP.
+          // NO-OP.
       }
     }
     return SynchronousFuture<S>(const S());
@@ -190,8 +191,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         }
 
         // If no country requirement is requested, check if this locale has no country.
-        if (true != withCountry &&
-            (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
@@ -201,5 +201,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
 }
 
 String getLang(Locale l) => l == null
-    ? null
-    : l.countryCode != null && l.countryCode.isEmpty ? l.languageCode : l.toString();
+  ? null
+  : l.countryCode != null && l.countryCode.isEmpty
+    ? l.languageCode
+    : l.toString();

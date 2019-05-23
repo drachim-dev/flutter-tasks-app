@@ -28,7 +28,7 @@ class _AddState extends State<Add> {
   TextEditingController _descController;
 
   _AddState({@required this.user, @required this.todoList, Todo todo})
-      : todo = todo ?? Todo(position: 0);
+      : todo = todo ?? Todo(position: todoList.todos.length);
 
   @override
   void initState() {
