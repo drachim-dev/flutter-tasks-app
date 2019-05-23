@@ -226,14 +226,21 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  ListView _buildListView(TodoList todoList) {
-    return ListView.separated(
-        itemBuilder: (BuildContext context, int index) {
-          final Todo todo = todoList.todos[index];
-          return _buildListItem(todo, todoList);
-        },
-        separatorBuilder: (BuildContext context, int index) => Divider(),
-        itemCount: todoList.todos.length);
+  Padding _buildListView(TodoList todoList) {
+    return Padding(
+        padding: const EdgeInsets.all(8),
+        child: ReorderableListView(
+          children: todoList.todos.map((todo) {
+            return Column(
+              key: Key(todo.id),
+              children: <Widget>[
+                _buildListItem(todo, todoList),
+                Divider(),
+              ],
+            );
+          }).toList(),
+          onReorder: (oldIndex, newIndex) => _onReorder(context, todoList, oldIndex, newIndex),
+        ));
   }
 
   ListTile _buildListItem(Todo todo, TodoList todoList) {
@@ -246,9 +253,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             onChanged: (bool isChecked) => _toggleTodo(todoList, todo, isChecked)),
         title: Text(
           todo.title,
+          maxLines: 1,
           style: textStyle,
           overflow: TextOverflow.ellipsis,
         ),
+        subtitle: todo.note.isNotEmpty
+            ? Text(
+                todo.note,
+                maxLines: 2,
+                style: textStyle,
+                overflow: TextOverflow.ellipsis,
+              )
+            : null,
+        isThreeLine: todo.note.isNotEmpty,
         onTap: () => _tapTodo(todoList, todo));
   }
 
@@ -285,5 +302,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void _tapTodo(final TodoList todoList, final Todo todo) {
     Navigator.pushNamed(context, Routes.editTask,
         arguments: {'user': _user, 'todoList': todoList, 'todo': todo});
+  }
+
+  void _onReorder(BuildContext context, TodoList todoList, oldIndex, newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final Todo todo = todoList.todos.removeAt(oldIndex);
+    todoList.todos.insert(newIndex, todo);
+
+    todoList.todos.forEach((element) {
+      element.position = todoList.todos.indexOf(element) * -1;
+    });
+
+    TodoListProvider.of(context).updateTodoList(_user, todoList);
   }
 }

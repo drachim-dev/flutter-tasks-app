@@ -26,20 +26,26 @@ class ListManager extends StatelessWidget {
     );
   }
 
-  ReorderableListView _buildReorderableList(BuildContext context, List<TodoList> todoLists) {
-    return ReorderableListView(
-        children: todoLists.map((todoList) {
-          return Container(
-              margin: EdgeInsets.all(16.0),
+  Padding _buildReorderableList(BuildContext context, List<TodoList> todoLists) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ReorderableListView(
+          children: todoLists.map((todoList) {
+            return Column(
               key: Key(todoList.id),
-              child: ListTile(
-                leading: Icon(Icons.drag_handle),
-                title: Text(todoList.title),
-                subtitle: Text(S.of(context).todos(todoList.todos.length)),
-                trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
-              ));
-        }).toList(),
-        onReorder: (oldIndex, newIndex) => _onReorder(context, todoLists, oldIndex, newIndex));
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.drag_handle),
+                  title: Text(todoList.title),
+                  subtitle: Text(S.of(context).todos(todoList.todos.length)),
+                  trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
+                ),
+                Divider(),
+              ],
+            );
+          }).toList(),
+          onReorder: (oldIndex, newIndex) => _onReorder(context, todoLists, oldIndex, newIndex)),
+    );
   }
 
   PopupMenuButton<String> _buildPopupMenuButton(BuildContext context, TodoList todoList,
