@@ -6,7 +6,7 @@
   "menuSort": "Sortieren",
   "menuFilter": "Filtern",
   "emptyMessageTitle": "Alles erledigt",
-  "hintCreateTodoLists": "Erstelle oben im Menü eine neue Liste",
+  "hintCreateTodoLists": "Erstelle als erstes eine Liste",
   "hintCreateTodos": "Erstelle neue Aufgaben, indem du + drückst",
   "addList": "Liste hinzufügen",
   "manageLists": "Listen verwalten",

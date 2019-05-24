@@ -155,6 +155,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   Scaffold _buildEmptyApp(ThemeData theme) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: _buildAppBar(),
       body: _buildEmptyItems(theme),
     );
@@ -185,6 +186,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           SizedBox(height: 32),
           Text(message, style: msgTextStyle),
+          SizedBox(height: 32),
+          if (todoList == null)
+            Padding(
+                padding: const EdgeInsets.only(bottom: 32),
+                child: RaisedButton.icon(
+                    color: theme.accentColor,
+                    onPressed: _addTodoList,
+                    icon: Icon(Icons.add),
+                    label: Text(S.of(context).addList)))
         ],
       ),
     );
@@ -194,16 +204,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return AppBar(
         title: Text(S.of(context).appTitle),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.sort),
-            tooltip: S.of(context).menuSort,
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            tooltip: S.of(context).menuFilter,
-            onPressed: () {},
-          ),
           PopupMenuButton<String>(
             onSelected: _onSelectMenuItem,
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

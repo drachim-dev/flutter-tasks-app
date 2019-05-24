@@ -6,7 +6,7 @@
   "menuSort": "Sort",
   "menuFilter": "Filter",
   "emptyMessageTitle": "Nothing to do",
-  "hintCreateTodoLists": "Start by creating a list in the menu above",
+  "hintCreateTodoLists": "Start by creating a list",
   "hintCreateTodos": "Create some tasks by tapping the +",
   "addList": "Add list",
   "manageLists": "Manage lists",

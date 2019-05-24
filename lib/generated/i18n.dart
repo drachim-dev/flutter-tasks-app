@@ -27,7 +27,7 @@ class S implements WidgetsLocalizations {
   String get deleteTodo => "Delete";
   String get emptyMessageTitle => "Nothing to do";
   String get getStartedMessage => "To get startet, press the button below";
-  String get hintCreateTodoLists => "Start by creating a list in the menu above";
+  String get hintCreateTodoLists => "Start by creating a list";
   String get hintCreateTodos => "Create some tasks by tapping the +";
   String get loginButtonLabel => "Turn on backup & sync";
   String get manageLists => "Manage lists";
@@ -67,7 +67,7 @@ class $de extends S {
   @override
   String get appTitle => "Tasks";
   @override
-  String get hintCreateTodoLists => "Erstelle oben im Menü eine neue Liste";
+  String get hintCreateTodoLists => "Erstelle als erstes eine Liste";
   @override
   String get hintCreateTodos => "Erstelle neue Aufgaben, indem du + drückst";
   @override

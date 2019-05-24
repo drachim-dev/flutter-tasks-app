@@ -14,15 +14,53 @@ class ListManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).manageLists),
+    return StreamBuilder(
+        stream: TodoListProvider.of(context).todoLists(user),
+        builder: (context, snapshot) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: Text(S.of(context).manageLists),
+            ),
+            body: snapshot.hasData && snapshot.data.isNotEmpty
+                ? _buildReorderableList(context, snapshot.data)
+                : _buildEmptyItems(context),
+            floatingActionButton: FloatingActionButton(
+              tooltip: S.of(context).addList,
+              onPressed: () => _addTodoList(context, snapshot.data),
+              child: Icon(Icons.add),
+            ),
+          );
+        });
+  }
+
+  Center _buildEmptyItems(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color fontColor = Colors.grey;
+    final TextStyle titleTextStyle = theme.textTheme.headline.copyWith(color: fontColor);
+    final TextStyle msgTextStyle = theme.textTheme.subhead.copyWith(color: fontColor);
+    final String msgTitle = S.of(context).emptyMessageTitle;
+    final String msgNoTodoList = S.of(context).hintCreateTodoLists;
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.local_cafe,
+            size: 128.0,
+            color: fontColor,
+          ),
+          SizedBox(height: 16),
+          Text(
+            msgTitle,
+            style: titleTextStyle,
+          ),
+          SizedBox(height: 32),
+          Text(msgNoTodoList, style: msgTextStyle),
+          SizedBox(height: 32),
+        ],
       ),
-      body: StreamBuilder(
-          stream: TodoListProvider.of(context).todoLists(user),
-          builder: (context, snapshot) {
-            return snapshot.hasData ? _buildReorderableList(context, snapshot.data) : Container();
-          }),
     );
   }
 
@@ -90,6 +128,17 @@ class ListManager extends StatelessWidget {
     todoLists.forEach((element) {
       element.position = todoLists.indexOf(element);
       TodoListProvider.of(context).updateTodoList(user, element);
+    });
+  }
+
+  void _addTodoList(BuildContext context, List<TodoList> todoLists) {
+    Helper.showInputDialog(context, title: S.of(context).addList, hint: S.of(context).nameOfList)
+        .then((input) {
+      if (input != null && input.isNotEmpty) {
+        final TodoList todoList =
+            TodoList(title: input, position: todoLists == null ? 0 : todoLists.length);
+        TodoListProvider.of(context).addTodoList(user, todoList);
+      }
     });
   }
 }
