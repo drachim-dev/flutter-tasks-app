@@ -30,6 +30,8 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return StreamBuilder(
         stream: TodoListProvider.of(context).todoLists(widget.user),
         builder: (context, snapshot) {
@@ -39,8 +41,8 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
               title: Text(S.of(context).manageLists),
             ),
             body: snapshot.hasData && snapshot.data.isNotEmpty
-                ? _buildReorderableList(context, snapshot.data)
-                : _buildEmptyItems(context),
+                ? _buildReorderableList(theme, context, snapshot.data)
+                : _buildEmptyItems(theme, context),
             floatingActionButton: ScaleTransition(
               scale: _fabController,
               child: FloatingActionButton(
@@ -53,8 +55,7 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
         });
   }
 
-  Center _buildEmptyItems(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+  Center _buildEmptyItems(ThemeData theme, BuildContext context) {
     final Color fontColor = Colors.grey;
     final TextStyle titleTextStyle = theme.textTheme.headline.copyWith(color: fontColor);
     final TextStyle msgTextStyle = theme.textTheme.subhead.copyWith(color: fontColor);
@@ -83,7 +84,11 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
     );
   }
 
-  NotificationListener _buildReorderableList(BuildContext context, List<TodoList> todoLists) {
+  NotificationListener _buildReorderableList(
+      ThemeData theme, BuildContext context, List<TodoList> todoLists) {
+    final isDark = theme.brightness == Brightness.dark;
+    final Color iconColor = isDark ? Colors.white70 : Colors.black12;
+
     return NotificationListener(
       onNotification: (t) {
         if (t is UserScrollNotification && t.metrics.maxScrollExtent != 0.0) {
@@ -103,10 +108,19 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
-                    leading: Icon(Icons.drag_handle),
+                    leading: Icon(
+                      Icons.drag_handle,
+                      color: iconColor,
+                    ),
                     title: Text(todoList.title),
                     subtitle: Text(S.of(context).todos(todoList.todos.length)),
-                    trailing: _buildPopupMenuButton(context, todoList, Icon(Icons.more_vert)),
+                    trailing: _buildPopupMenuButton(
+                        context,
+                        todoList,
+                        Icon(
+                          Icons.more_vert,
+                          color: iconColor,
+                        )),
                   ),
                 ),
                 Divider(),

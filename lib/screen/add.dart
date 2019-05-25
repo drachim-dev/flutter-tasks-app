@@ -34,8 +34,8 @@ class _AddState extends State<Add> {
   void initState() {
     super.initState();
 
-    _titleController = new TextEditingController(text: todo.title);
-    _descController = new TextEditingController(text: todo.note);
+    _titleController = TextEditingController(text: todo.title);
+    _descController = TextEditingController(text: todo.note);
   }
 
   @override
@@ -60,7 +60,7 @@ class _AddState extends State<Add> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               _buildDescription(theme),
-              //_buildReminderCard(theme),
+              _buildReminderCard(theme),
             ],
           ),
         ),
@@ -144,6 +144,40 @@ class _AddState extends State<Add> {
         contentPadding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
         filled: true,
       ),
+    );
+  }
+
+  ExpansionTile _buildReminderCard(ThemeData theme) {
+    final Icon reminderIcon = todo.reminderSet
+        ? Icon(Icons.notifications_active, color: theme.accentColor)
+        : Icon(Icons.notifications_off);
+
+    return ExpansionTile(
+      title: Text('Time reminder'),
+      initiallyExpanded: todo.reminderSet,
+      onExpansionChanged: (bool value) {
+        setState(() {
+          todo.reminderSet = value;
+        });
+      },
+      leading: reminderIcon,
+      children: <Widget>[
+        IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+                Icon(Icons.calendar_today, color: Colors.grey),
+                Icon(Icons.access_time, color: Colors.grey),
+              ]),
+              //buildOptionColumn(dateTitle1, timeTitle1, 0),
+              //buildOptionColumn(dateTitle2, timeTitle2, 1),
+              //buildOptionColumn(dateTitle3, timeTitle3, 2),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

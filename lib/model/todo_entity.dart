@@ -7,13 +7,28 @@ class TodoEntity {
   final String note;
   final int position;
   final bool complete;
+  final bool reminderSet;
+  final DateTime reminder;
 
-  TodoEntity({String id, this.title, this.note, @required this.position, this.complete = false})
+  TodoEntity(
+      {String id,
+      this.title,
+      this.note,
+      @required this.position,
+      this.complete = false,
+      this.reminderSet = false,
+      this.reminder})
       : this.id = id ?? Uuid().generateV4();
 
   @override
   int get hashCode =>
-      id.hashCode ^ title.hashCode ^ note.hashCode ^ position.hashCode ^ complete.hashCode;
+      id.hashCode ^
+      title.hashCode ^
+      note.hashCode ^
+      position.hashCode ^
+      complete.hashCode ^
+      reminderSet.hashCode ^
+      reminder.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -24,7 +39,9 @@ class TodoEntity {
           title == other.title &&
           note == other.note &&
           position == other.position &&
-          complete == other.complete;
+          complete == other.complete &&
+          reminderSet == other.reminderSet &&
+          reminder == other.reminder;
 
   Map<String, Object> toJson() {
     return {
@@ -32,12 +49,14 @@ class TodoEntity {
       "note": note,
       "position": position,
       "complete": complete,
+      "reminderSet": reminderSet,
+      "reminder": reminder,
     };
   }
 
   @override
   String toString() {
-    return 'TodoEntity{id: $id, title: $title, note: $note, position: $position, complete: $complete}';
+    return 'TodoEntity{id: $id, title: $title, note: $note, position: $position, complete: $complete, reminderSet: $reminderSet, reminder: $reminder}';
   }
 
   static TodoEntity fromJson(Map<dynamic, dynamic> json) {
@@ -47,6 +66,8 @@ class TodoEntity {
       note: json["note"] as String,
       position: json["position"] as int,
       complete: json["complete"] as bool,
+      reminderSet: json["reminderSet"] as bool,
+      reminder: json["reminder"] as DateTime,
     );
   }
 }

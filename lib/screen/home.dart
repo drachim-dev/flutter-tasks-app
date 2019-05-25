@@ -22,7 +22,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   bool _progress = false;
   UserEntity _user;
-  List<TodoList> todoLists;
+  List<TodoList> _todoLists;
 
   AnimationController _fabController;
 
@@ -58,10 +58,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               stream: TodoListProvider.of(context).todoLists(_user),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  todoLists = snapshot.data;
-                  return todoLists.isEmpty
+                  _todoLists = snapshot.data;
+                  return _todoLists.isEmpty
                       ? _buildEmptyApp(theme)
-                      : _buildApp(context, theme, todoLists);
+                      : _buildApp(context, theme, _todoLists);
                 } else {
                   return Container();
                 }
@@ -307,7 +307,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         .then((input) {
       if (input != null && input.isNotEmpty) {
         final TodoList todoList =
-            TodoList(title: input, position: todoLists == null ? 0 : todoLists.length);
+            TodoList(title: input, position: _todoLists == null ? 0 : _todoLists.length);
         TodoListProvider.of(context).addTodoList(_user, todoList);
       }
     });
