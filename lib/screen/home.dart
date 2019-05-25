@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
 import 'package:tasks_flutter_v2/generated/i18n.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
@@ -23,9 +24,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   UserEntity _user;
   List<TodoList> todoLists;
 
+  AnimationController _fabController;
+
   @override
   void initState() {
     super.initState();
+
+    _fabController =
+        AnimationController(vsync: this, value: 0.0, duration: Duration(milliseconds: 250));
+    _fabController.forward();
   }
 
   @override
@@ -140,13 +147,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   : _buildEmptyItems(theme, todoList: todoList);
             }).toList(),
           ),
-          floatingActionButton: FloatingActionButton(
-            tooltip: S.of(context).addTodo,
-            onPressed: () => Navigator.pushNamed(context, Routes.addTask, arguments: {
-                  'user': _user,
-                  'todoList': todoLists[DefaultTabController.of(context).index]
-                }),
-            child: Icon(Icons.add),
+          floatingActionButton: ScaleTransition(
+            scale: _fabController,
+            child: FloatingActionButton(
+              tooltip: S.of(context).addTodo,
+              onPressed: () => Navigator.pushNamed(context, Routes.addTask, arguments: {
+                    'user': _user,
+                    'todoList': todoLists[DefaultTabController.of(context).index]
+                  }),
+              child: Icon(Icons.add),
+            ),
           ),
         );
       }),
@@ -226,21 +236,31 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  Padding _buildListView(TodoList todoList) {
-    return Padding(
+  NotificationListener _buildListView(TodoList todoList) {
+    return NotificationListener(
+      onNotification: (t) {
+        if (t is UserScrollNotification && t.metrics.maxScrollExtent != 0.0) {
+          if (t.direction == ScrollDirection.reverse) {
+            //_fabController.reverse();
+          } else if (t.direction == ScrollDirection.forward) {
+            //_fabController.forward();
+          }
+        }
+      },
+      child: ReorderableListView(
         padding: const EdgeInsets.all(8),
-        child: ReorderableListView(
-          children: todoList.todos.map((todo) {
-            return Column(
-              key: Key(todo.id),
-              children: <Widget>[
-                _buildListItem(todo, todoList),
-                Divider(),
-              ],
-            );
-          }).toList(),
-          onReorder: (oldIndex, newIndex) => _onReorder(context, todoList, oldIndex, newIndex),
-        ));
+        children: todoList.todos.map((todo) {
+          return Column(
+            key: Key(todo.id),
+            children: <Widget>[
+              _buildListItem(todo, todoList),
+              Divider(),
+            ],
+          );
+        }).toList(),
+        onReorder: (oldIndex, newIndex) => _onReorder(context, todoList, oldIndex, newIndex),
+      ),
+    );
   }
 
   ListTile _buildListItem(Todo todo, TodoList todoList) {
@@ -260,12 +280,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         subtitle: todo.note.isNotEmpty
             ? Text(
                 todo.note,
-                maxLines: 2,
+                maxLines: 1,
                 style: textStyle,
                 overflow: TextOverflow.ellipsis,
               )
             : null,
-        isThreeLine: todo.note.isNotEmpty,
         onTap: () => _tapTodo(todoList, todo));
   }
 
