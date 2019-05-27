@@ -32,7 +32,7 @@ class TodoList {
 
   @override
   String toString() {
-    return 'Todo{id: $id, title: $title, todos: $todos, position: $position}';
+    return 'TodoList{id: $id, title: $title, todos: $todos, position: $position}';
   }
 
   TodoListEntity toEntity() {

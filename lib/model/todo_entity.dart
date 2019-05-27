@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:tasks_flutter_v2/model/uuid.dart';
 
@@ -67,7 +68,7 @@ class TodoEntity {
       position: json["position"] as int,
       complete: json["complete"] as bool,
       reminderSet: json["reminderSet"] as bool,
-      reminder: json["reminder"] as DateTime,
+      reminder: (json["reminder"] as Timestamp)?.toDate(),
     );
   }
 }

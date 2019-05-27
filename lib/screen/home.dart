@@ -63,7 +63,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ? _buildEmptyApp(theme)
                       : _buildApp(context, theme, _todoLists);
                 } else {
-                  return Container();
+                  return _buildEmptyApp(theme);
                 }
               });
         });
@@ -285,6 +285,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 overflow: TextOverflow.ellipsis,
               )
             : null,
+        trailing: todo.reminderSet ? Text(Helper.formatDateTime(todo.reminder)) : null,
         onTap: () => _tapTodo(todoList, todo));
   }
 

@@ -20,7 +20,9 @@ class TodoListBloc {
   Future<void> logout() => repository.logout();
 
   Stream<List<TodoList>> todoLists(UserEntity user) {
-    return repository.todoLists(user).map((entities) => entities.map(TodoList.fromEntity).toList());
+    return repository.todoLists(user).map((entities) {
+      return entities.map(TodoList.fromEntity).toList();
+    });
   }
 
   Future<void> addTodoList(UserEntity user, TodoList todoList) =>
