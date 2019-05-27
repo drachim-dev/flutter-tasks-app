@@ -19,5 +19,6 @@
   "todoTitle": "Title",
   "todoDesc": "Description",
   "todosOne": "$todosCount item",
-  "todosOther": "$todosCount items"
+  "todosOther": "$todosCount items",
+  "reminder": "Reminder"
 }

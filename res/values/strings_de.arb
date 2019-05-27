@@ -19,5 +19,6 @@
   "todoTitle": "Titel",
   "todoDesc": "Beschreibung",
   "todosOne": "$todosCount Aufgabe",
-  "todosOther": "$todosCount Aufgaben"
+  "todosOther": "$todosCount Aufgaben",
+  "reminder": "Erinnerung"
 }

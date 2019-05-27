@@ -35,6 +35,7 @@ class S implements WidgetsLocalizations {
   String get menuSettings => "Settings";
   String get menuSort => "Sort";
   String get nameOfList => "Name";
+  String get reminder => "Reminder";
   String get renameList => "Rename list";
   String get todoDesc => "Description";
   String get todoTitle => "Title";
@@ -60,6 +61,8 @@ class $de extends S {
   String get nameOfList => "Name";
   @override
   String get getStartedMessage => "Um zu beginnen, bitte den Button unten drücken";
+  @override
+  String get reminder => "Erinnerung";
   @override
   String get todoDesc => "Beschreibung";
   @override

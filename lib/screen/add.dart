@@ -213,7 +213,7 @@ class _AddState extends State<Add> {
         _timeOption3 == null ? _timeCustom : Helper.formatTimeOfDay(context, _timeOption3);
 
     return ExpansionTile(
-      title: Text('Time reminder'),
+      title: Text(S.of(context).reminder),
       initiallyExpanded: todo.reminderSet,
       onExpansionChanged: (bool value) {
         setState(() {
