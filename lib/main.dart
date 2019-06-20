@@ -10,7 +10,7 @@ import 'screen/home.dart';
 import 'screen/list_manager.dart';
 
 main() {
-  runApp(new MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

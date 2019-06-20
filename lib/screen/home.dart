@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tasks_flutter_v2/common/helper.dart';
 import 'package:tasks_flutter_v2/generated/i18n.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
@@ -20,10 +21,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   static const String _menuManageListsKey = '_menuManageListsKey';
   static const String _menuSettingsKey = '_menuSettingsKey';
 
+  NotificationAppLaunchDetails notificationDetails;
+  Todo notificationDetailsTodo;
+
   bool _progress = false;
   UserEntity _user;
-  List<TodoList> _todoLists;
 
+  List<TodoList> _todoLists;
   AnimationController _fabController;
 
   @override
@@ -40,6 +44,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  initNotifications() async {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    notificationDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+    // notificationDetailsTodo = await TodoListProvider.of(context).todo(_user, '222').first;
+
+    if (notificationDetails.didNotificationLaunchApp) {
+      notificationDetailsTodo =
+          await TodoListProvider.of(context).todo(_user, notificationDetails.payload).first;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -54,14 +71,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
           // logged in
           _user = snapshot.data;
-          return StreamBuilder(
+          initNotifications();
+
+          return StreamBuilder<List<TodoList>>(
               stream: TodoListProvider.of(context).todoLists(_user),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data.isNotEmpty) {
                   _todoLists = snapshot.data;
-                  return _todoLists.isEmpty
-                      ? _buildEmptyApp(theme)
-                      : _buildApp(context, theme, _todoLists);
+                  return _buildApp(context, theme, _todoLists);
                 } else {
                   return _buildEmptyApp(theme);
                 }
@@ -142,9 +159,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           appBar: _buildAppBar(todoLists: todoLists),
           body: TabBarView(
             children: todoLists.map((todoList) {
-              return todoList.todos.isNotEmpty
-                  ? _buildListView(todoList)
-                  : _buildEmptyItems(theme, todoList: todoList);
+              return StreamBuilder<List<Todo>>(
+                  stream: TodoListProvider.of(context).todosByList(_user, todoList.id),
+                  builder: (context, snapshot) {
+                    return snapshot.hasData && snapshot.data.isNotEmpty
+                        ? _buildListView(snapshot.data, todoList)
+                        : _buildEmptyItems(theme, todoList: todoList);
+                  });
             }).toList(),
           ),
           floatingActionButton: ScaleTransition(
@@ -152,9 +173,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             child: FloatingActionButton(
               tooltip: S.of(context).addTodo,
               onPressed: () => Navigator.pushNamed(context, Routes.addTask, arguments: {
-                    'user': _user,
-                    'todoList': todoLists[DefaultTabController.of(context).index]
-                  }),
+                'user': _user,
+                'todoList': todoLists[DefaultTabController.of(context).index]
+              }),
               child: Icon(Icons.add),
             ),
           ),
@@ -217,11 +238,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           PopupMenuButton<String>(
             onSelected: _onSelectMenuItem,
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  Helper.buildMenuItem(Icons.playlist_add, S.of(context).addList, _menuAddListKey),
-                  Helper.buildMenuItem(Icons.list, S.of(context).manageLists, _menuManageListsKey),
-                  Helper.buildMenuItem(
-                      Icons.settings, S.of(context).menuSettings, _menuSettingsKey),
-                ],
+              Helper.buildMenuItem(Icons.playlist_add, S.of(context).addList, _menuAddListKey),
+              Helper.buildMenuItem(Icons.list, S.of(context).manageLists, _menuManageListsKey),
+              Helper.buildMenuItem(Icons.settings, S.of(context).menuSettings, _menuSettingsKey),
+            ],
           )
         ],
         bottom: todoLists == null ? null : _buildTabBar(todoLists));
@@ -236,7 +256,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  NotificationListener _buildListView(TodoList todoList) {
+  NotificationListener _buildListView(List<Todo> todos, TodoList todoList) {
     return NotificationListener(
       onNotification: (t) {
         if (t is UserScrollNotification && t.metrics.maxScrollExtent != 0.0) {
@@ -249,7 +269,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       },
       child: ReorderableListView(
         padding: const EdgeInsets.all(8),
-        children: todoList.todos.map((todo) {
+        children: todos.map((todo) {
           return Column(
             key: Key(todo.id),
             children: <Widget>[
@@ -258,7 +278,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ],
           );
         }).toList(),
-        onReorder: (oldIndex, newIndex) => _onReorder(context, todoList, oldIndex, newIndex),
+        onReorder: (oldIndex, newIndex) => _onReorder(context, todos, todoList, oldIndex, newIndex),
       ),
     );
   }
@@ -324,17 +344,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         arguments: {'user': _user, 'todoList': todoList, 'todo': todo});
   }
 
-  void _onReorder(BuildContext context, TodoList todoList, oldIndex, newIndex) {
+  void _onReorder(BuildContext context, List<Todo> todos, TodoList todoList, oldIndex, newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    final Todo todo = todoList.todos.removeAt(oldIndex);
-    todoList.todos.insert(newIndex, todo);
+    final Todo todo = todos.removeAt(oldIndex);
+    todos.insert(newIndex, todo);
 
-    todoList.todos.forEach((element) {
-      element.position = todoList.todos.indexOf(element) * -1;
+    todos.forEach((element) {
+      element.position = todos.indexOf(element) * -1;
     });
 
-    TodoListProvider.of(context).updateTodoList(_user, todoList);
+    TodoListProvider.of(context).updateTodo(_user, todoList, todo);
   }
 }

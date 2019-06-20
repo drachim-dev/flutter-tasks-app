@@ -17,11 +17,14 @@ abstract class TodoRepository {
   Future<void> deleteTodos(UserEntity user, TodoListEntity todoList, List<TodoEntity> idList);
 
   Stream<List<TodoListEntity>> todoLists(UserEntity user);
+  Stream<List<TodoEntity>> todosByList(UserEntity user, String listId);
+  Stream<TodoEntity> todo(UserEntity user, String id);
 }
 
 class FirestoreTodoRepository implements TodoRepository {
   static const String usersPath = 'users';
   static const String tasklistsPath = 'tasklists';
+  static const String todosPath = 'todos';
 
   final Firestore firestore;
 
@@ -52,39 +55,113 @@ class FirestoreTodoRepository implements TodoRepository {
 
   @override
   Future<void> addTodo(UserEntity user, TodoListEntity todoList, final TodoEntity todo) {
-    todoList.todos.add(todo);
-    return updateTodoList(user, todoList);
+    todoList.countTodos++;
+    updateTodoList(user, todoList);
+
+    return firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(todoList.id)
+        .collection(todosPath)
+        .document(todo.id)
+        .setData(todo.toJson());
   }
 
   @override
-  Future<void> updateTodo(UserEntity user, TodoListEntity todoList, final TodoEntity todo) {
-    int index = todoList.todos.indexOf(todo);
-    todoList.todos[index] = todo;
-    return updateTodoList(user, todoList);
+  Future<void> updateTodo(
+      final UserEntity user, final TodoListEntity todoList, final TodoEntity todo) {
+    return firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(todoList.id)
+        .collection(todosPath)
+        .document(todo.id)
+        .updateData(todo.toJson());
   }
 
   @override
   Future<void> deleteTodos(UserEntity user, TodoListEntity todoList, final List<TodoEntity> todos) {
-    todos.forEach((todo) => todoList.todos.remove(todo));
-    return updateTodoList(user, todoList);
+    todoList.countTodos++;
+    updateTodoList(user, todoList);
+
+    final CollectionReference todoRef = firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(todoList.id)
+        .collection(todosPath);
+
+    todos.forEach((todo) {
+      return todoRef.document(todo.id).delete();
+    });
   }
 
   @override
   Stream<List<TodoListEntity>> todoLists(UserEntity user) {
-    final Stream<QuerySnapshot> querySnapshot =
-        firestore.collection(usersPath).document(user.id).collection(tasklistsPath).snapshots();
+    final CollectionReference reference =
+        firestore.collection(usersPath).document(user.id).collection(tasklistsPath);
+    final Stream<QuerySnapshot> querySnapshot = reference.snapshots();
+
     return querySnapshot.map((snapshot) {
       List<TodoListEntity> todoLists = snapshot.documents.map((doc) {
-        List<TodoEntity> todos = List<TodoEntity>.from(doc['todos'].map((i) {
-          return TodoEntity.fromJson(i);
-        }))
-          ..sort((a, b) => b.position.compareTo(a.position));
-
         return TodoListEntity(
-            id: doc.documentID, title: doc['title'] ?? '', todos: todos, position: doc['position']);
+            id: doc.documentID,
+            title: doc['title'] ?? '',
+            countTodos: doc['countTodos'],
+            position: doc['position']);
       }).toList();
+
       todoLists.sort((a, b) => a.position.compareTo(b.position));
       return todoLists;
+    });
+  }
+
+  @override
+  Stream<List<TodoEntity>> todosByList(UserEntity user, String listId) {
+    final CollectionReference reference = firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(listId)
+        .collection(todosPath);
+    final Stream<QuerySnapshot> querySnapshot = reference.snapshots();
+
+    return querySnapshot.map((snapshot) {
+      List<TodoEntity> todos = snapshot.documents.map((doc) {
+        return TodoEntity(
+            id: doc.documentID,
+            title: doc['title'] ?? '',
+            note: doc['note'] ?? '',
+            position: doc['position'],
+            complete: doc['complete'],
+            reminderSet: doc['reminderSet'],
+            reminder: doc['reminder']);
+      }).toList();
+
+      todos.sort((a, b) => a.position.compareTo(b.position));
+      return todos;
+    });
+  }
+
+  @override
+  Stream<TodoEntity> todo(UserEntity user, String id) {
+    final Stream<DocumentSnapshot> querySnapshot = firestore
+        .collection(usersPath)
+        .document(user.id)
+        .collection(tasklistsPath)
+        .document(id)
+        .snapshots();
+    querySnapshot.map((querySnapshot) {
+      return TodoEntity(
+          id: querySnapshot.documentID,
+          title: querySnapshot['title'] ?? '',
+          note: querySnapshot['note'] ?? '',
+          position: querySnapshot['position'],
+          complete: querySnapshot['complete'],
+          reminderSet: querySnapshot['reminderSet'],
+          reminder: querySnapshot['reminder']);
     });
   }
 }

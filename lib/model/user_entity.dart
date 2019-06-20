@@ -25,6 +25,8 @@ class UserEntity {
   }
 
   static UserEntity fromFirebaseUser(FirebaseUser firebaseUser) {
+    if (firebaseUser == null) return null;
+
     return UserEntity(
       id: firebaseUser.uid,
       displayName: firebaseUser.displayName,

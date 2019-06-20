@@ -1,17 +1,16 @@
-import 'package:tasks_flutter_v2/model/todo_entity.dart';
 import 'package:tasks_flutter_v2/model/uuid.dart';
 
 class TodoListEntity {
   final String id;
   final String title;
-  final List<TodoEntity> todos;
+  int countTodos;
   final int position;
 
-  TodoListEntity({String id, this.title, this.todos, this.position})
+  TodoListEntity({String id, this.title, this.countTodos, this.position})
       : this.id = id ?? Uuid().generateV4();
 
   @override
-  int get hashCode => id.hashCode ^ title.hashCode ^ todos.hashCode ^ position.hashCode;
+  int get hashCode => id.hashCode ^ title.hashCode ^ countTodos.hashCode ^ position.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -20,27 +19,23 @@ class TodoListEntity {
           runtimeType == other.runtimeType &&
           id == other.id &&
           title == other.title &&
-          todos == other.todos &&
+          countTodos == other.countTodos &&
           position == other.position;
 
   Map<String, Object> toJson() {
-    return {
-      "title": title,
-      "todos": todos.map((entity) => entity.toJson()).toList(),
-      "position": position
-    };
+    return {"title": title, "countTodos": countTodos, "position": position};
   }
 
   @override
   String toString() {
-    return 'TodoListEntity{id: $id, title: $title, todos: $todos, position: $position}';
+    return 'TodoListEntity{id: $id, title: $title, todos: $countTodos, position: $position}';
   }
 
   static TodoListEntity fromJson(Map<String, Object> json) {
     return TodoListEntity(
       id: json["id"] as String,
       title: json["title"] as String,
-      todos: json["todos"] as List<TodoEntity>,
+      countTodos: json["countTodos"] as int,
       position: json["position"] as int,
     );
   }

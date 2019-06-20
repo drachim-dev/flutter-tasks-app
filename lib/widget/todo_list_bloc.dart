@@ -25,6 +25,16 @@ class TodoListBloc {
     });
   }
 
+  Stream<List<Todo>> todosByList(UserEntity user, String listId) {
+    return repository.todosByList(user, listId).map((entities) {
+      return entities.map(Todo.fromEntity).toList();
+    });
+  }
+
+  Stream<Todo> todo(UserEntity user, String id) {
+    return repository.todo(user, id).map(Todo.fromEntity);
+  }
+
   Future<void> addTodoList(UserEntity user, TodoList todoList) =>
       repository.addTodoList(user, todoList);
 

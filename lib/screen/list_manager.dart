@@ -32,7 +32,7 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return StreamBuilder(
+    return StreamBuilder<List<TodoList>>(
         stream: TodoListProvider.of(context).todoLists(widget.user),
         builder: (context, snapshot) {
           return Scaffold(
@@ -113,7 +113,7 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
                       color: iconColor,
                     ),
                     title: Text(todoList.title),
-                    subtitle: Text(S.of(context).todos(todoList.todos.length)),
+                    subtitle: Text(S.of(context).todos(todoList.countTodos)),
                     trailing: _buildPopupMenuButton(
                         context,
                         todoList,
@@ -137,11 +137,10 @@ class _ListManagerState extends State<ListManager> with SingleTickerProviderStat
       onSelected: (value) => _onSelectMenuItem(value, context, todoList),
       icon: menuIcon,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-            Helper.buildMenuItem(
-                Icons.edit, S.of(context).renameList, ListManager._menuRenameListKey),
-            Helper.buildMenuItem(
-                Icons.remove_circle, S.of(context).deleteList, ListManager._menuDeleteListKey),
-          ],
+        Helper.buildMenuItem(Icons.edit, S.of(context).renameList, ListManager._menuRenameListKey),
+        Helper.buildMenuItem(
+            Icons.remove_circle, S.of(context).deleteList, ListManager._menuDeleteListKey),
+      ],
     );
   }
 

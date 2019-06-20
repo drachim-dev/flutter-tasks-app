@@ -47,7 +47,7 @@ class _AddState extends State<Add> {
   TimeOfDay _timeOption3;
 
   _AddState({@required this.user, @required this.todoList, Todo todo})
-      : todo = todo ?? Todo(position: todoList.todos.length);
+      : todo = todo ?? Todo(position: todoList.countTodos);
 
   @override
   void initState() {
@@ -140,8 +140,8 @@ class _AddState extends State<Add> {
         PopupMenuButton<String>(
           onSelected: _onSelectMenuItem,
           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                Helper.buildMenuItem(Icons.delete, S.of(context).deleteTodo, _menuDeleteKey),
-              ],
+            Helper.buildMenuItem(Icons.delete, S.of(context).deleteTodo, _menuDeleteKey),
+          ],
         )
       ],
       bottom: PreferredSize(

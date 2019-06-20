@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tasks_flutter_v2/model/todo.dart';
+import 'package:tasks_flutter_v2/model/todo_entity.dart';
 import 'package:tasks_flutter_v2/model/todo_list.dart';
 import 'package:tasks_flutter_v2/model/todo_list_entity.dart';
 import 'package:tasks_flutter_v2/model/user_entity.dart';
@@ -43,4 +44,9 @@ class Repository {
     UserEntity user,
   ) =>
       _todoRepository.todoLists(user);
+
+  Stream<List<TodoEntity>> todosByList(UserEntity user, String listId) =>
+      _todoRepository.todosByList(user, listId);
+
+  Stream<TodoEntity> todo(UserEntity user, String id) => _todoRepository.todo(user, id);
 }
