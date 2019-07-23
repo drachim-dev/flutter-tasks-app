@@ -1,3 +1,7 @@
+# sensitive data
+google-services.json
+keys.xml
+
 # Miscellaneous
 *.class
 *.lock
