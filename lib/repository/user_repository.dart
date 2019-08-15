@@ -20,8 +20,8 @@ class FirebaseUserRepository implements UserRepository {
 
   @override
   Future<UserEntity> loginAnonymously() async {
-    final FirebaseUser firebaseUser = await auth.signInAnonymously();
-    return UserEntity.fromFirebaseUser(firebaseUser);
+    final AuthResult authResult = await auth.signInAnonymously();
+    return UserEntity.fromFirebaseUser(authResult.user);
   }
 
   @override
@@ -33,8 +33,8 @@ class FirebaseUserRepository implements UserRepository {
       idToken: googleAuth.idToken,
     );
 
-    final FirebaseUser firebaseUser = await auth.signInWithCredential(credential);
-    return UserEntity.fromFirebaseUser(firebaseUser);
+    final AuthResult authResult = await auth.signInWithCredential(credential);
+    return UserEntity.fromFirebaseUser(authResult.user);
   }
 
   @override
